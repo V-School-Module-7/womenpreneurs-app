@@ -1,7 +1,8 @@
 import React from 'react';
 import {withUser} from './context/UserProvider';
 import { Link, withRouter } from 'react-router-dom';
-import firebase from "firebase";
+import fire from "./Firebase";
+
 
 class Nav extends React.Component {
 
@@ -13,16 +14,14 @@ class Nav extends React.Component {
   }
 
   handleShowUser = () => {
-    firebase.auth().currentUser.getIdToken().then((token) => {
-      console.log('you are...', token)
-    });
+    this.props.showToken()
   }
 
   render() {
     return (
       <div style={{width: '100%', height: '100px', display: 'flex', alignItems: 'center'}}>
-        {this.props.user && this.props.uid ? <button style={{marginLeft: '40px'}} onClick={this.handleLogout}>Logout</button> : <Link to='/auth' style={{marginLeft: '40px'}}>Login</Link> }
-      <button onClick={this.handleShowUser}>who am i?</button>
+        {this.props.uid ? <button style={{marginLeft: '40px'}} onClick={this.handleLogout}>Logout</button> : <Link to='/auth' style={{marginLeft: '40px'}}>Login</Link> }
+      <button onClick={this.handleShowUser}>Log User Token</button>
       </div>
     )
   }

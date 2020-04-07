@@ -1,6 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import { withUser } from "./context/UserProvider";
+// import { withUser } from "./context/UserProvider";
 
 const Landing = props => {
   return (
@@ -10,4 +10,4 @@ const Landing = props => {
   );
 };
 
-export default withRouter(withUser(Landing));
+export default withRouter(Landing);

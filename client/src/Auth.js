@@ -1,18 +1,19 @@
 import React from "react";
-import FirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import firebase from "firebase";
+
 import { withRouter } from 'react-router-dom';
 import { withUser } from "./context/UserProvider";
+
+// const firebaseAppAuth = firebaseApp.Auth();
 
 class Auth extends React.Component {
   constructor() {
     super();
     this.state = {
       email: "",
-      password: "",
-      authErrorMsg: ""
+      password: ""
     };
   }
+
 
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
@@ -20,54 +21,29 @@ class Auth extends React.Component {
 
   handleEmailPasswordLogin = e => {
     e.preventDefault();
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(this.state.email, this.state.password)
-      .then(user => {
-        console.log(user.user);
-        this.props.login(user.user);
-      })
-      .then(() => {
-        firebase.auth().currentUser.getIdToken().then((token) => {
-          console.log('token', token)
-        });
-      })
-      .catch(error => {
-        console.log(error);
-        this.setState({
-          authErrorMsg: error.message
-        });
-      });
-      this.props.history.push('/home');
+    let userObj = {
+      email: this.state.email,
+      password: this.state.password
+    }
+    this.props.login(userObj)
   };
 
   handleEmailPasswordSignup = e => {
     e.preventDefault();
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(this.state.email, this.state.password)
-      .then(user => {
-        console.log(user.user);
-        this.props.signup(user.user);
-      })
-      .catch(error => {
-        console.log(error);
-        this.setState({
-          authErrorMsg: error.message
-        });
-      });
-      firebase.auth().currentUser.getIdToken().then((token) => {
-        console.log('token', token)
-      });
-      this.props.history.push('/home');
+    let userObj = {
+      email: this.state.email,
+      password: this.state.password
+    }
+    this.props.signup(userObj)
+      // this.props.history.push('/home');
   };
 
   render() {
 
     return (
-      <div className="col-md-6">
+      <div>
         <form>
-          <div class="form-group">
+          <div>
             <label>Email address</label>
             <input
               value={this.state.email}
@@ -77,7 +53,7 @@ class Auth extends React.Component {
               placeholder="Enter email"
             />
           </div>
-          <div class="form-group">
+          <div>
             <label>Password</label>
             <input
               value={this.state.password}

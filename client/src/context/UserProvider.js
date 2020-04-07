@@ -1,34 +1,25 @@
 import React from 'react';
 import axios from 'axios';
-import firebase from 'firebase';
+import firebaseConfig from '../Firebase';
+import firebase from "firebase";
+
+let fire = firebase.initializeApp(firebaseConfig);
+
 const UserContext = React.createContext();
-
-
-
-let firebaseConfig = {
-  apiKey: "AIzaSyAFJY-C3QAnvT1_TOS7ofTytAvy_ELDglk",
-  authDomain: "womanpreneurs-auth-starter.firebaseapp.com",
-  databaseURL: "https://womanpreneurs-auth-starter.firebaseio.com",
-  projectId: "womanpreneurs-auth-starter",
-  storageBucket: "womanpreneurs-auth-starter.appspot.com",
-  messagingSenderId: "809060934869",
-  appId: "1:809060934869:web:e4a27002185c9375082e5c"
-};
-
-//connects to firebase using admin
-!firebase.apps.length
-  ? firebase.initializeApp(firebaseConfig)
-  : firebase.app();
 
 class UserProvider extends React.Component {
   constructor() {
     super();
     this.state = {
+      //NOTE: including user object to show data available, probably should not
+      //keep in state in production? 
       user: localStorage.getItem("user") || {},
       uid: localStorage.getItem("uid") || "",
       authErrMsg: ''
     }
   }
+
+ 
 
   handleErrMsg = (errMsg) => {
     this.setState({authErrMsg: errMsg})
@@ -36,52 +27,77 @@ class UserProvider extends React.Component {
 
 
   login = (user) => {
-    this.setState({
-      user: user,
-      uid: user.uid
-    })
-    localStorage.setItem("uid", this.state.uid);
-    localStorage.setItem("user", this.state.user);
+    console.log('in context', user)
+    fire
+      .auth()
+      .signInWithEmailAndPassword(user.email, user.password)
+      .then(loggedInUser => {
+        console.log('in .then login context loggedin', loggedInUser)
+        this.authListener();
+      })
+      .catch(error => {
+        this.setState({
+          authErrorMsg: error.message
+        });
+      });
   }
 
   signup = (user) => {
-    this.setState({
-      user: user,
-      uid: user.uid
-    })
-    localStorage.setItem("uid", this.state.uid);
-    localStorage.setItem('user', this.state.user);
+    console.log('context signup', user)
+    fire
+      .auth()
+      .createUserWithEmailAndPassword(user.email, user.password)
+      .then(createdUser => {
+        console.log('in .then() create user context', createdUser);
+        this.authListener();
+      })
+      .catch(error => {
+        console.log(error);
+        this.setState({
+          authErrorMsg: error.message
+        });
+      });
   }
 
   logout = () => {
-    localStorage.removeItem("uid");
-    localStorage.removeItem("user");
-    this.setState({
-      user: {},
-      uid: ""
+    fire
+    .auth()
+    .signOut()
+    .then(() => {
+      this.authListener();
     })
   }
 
-
+  showToken = () => {
+    fire.auth().currentUser.getIdToken().then((token) => {
+      console.log('you are...', token)
+    });
+  }
   
-  // authListener = () => {
-  //   firebase.auth().onAuthStateChanged(user => {
-  //     if (user) {
-  //       this.setState({
-  //         user: user
-  //       });
-  //       localStorage.setItem("user", user.uid);
-  //     } else {
-  //       this.setState({
-  //         user: null
-  //       });
-  //       localStorage.removeItem("user");
-  //     }
-  //   });
-  // };
+  authListener = () => {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setState({
+          user: user,
+          uid: user.uid
+        });
+          localStorage.setItem("uid", user.uid);
+          localStorage.setItem("user", user)
+        console.log('local storage/state set item')
+      } else {
+        this.setState({
+          user: null,
+          uid: null
+        });
+        console.log('local storage remove')
+        localStorage.removeItem("user");
+        localStorage.removeItem("uid")
+      }
+    });
+  };
 
 
-  render() {
+  render() {    
     return (
       <UserContext.Provider
         value={{
@@ -89,6 +105,7 @@ class UserProvider extends React.Component {
           signup: this.signup,
           login: this.login,
           logout: this.logout,
+          showToken: this.showToken
         }}
       >
         { this.props.children }
@@ -107,4 +124,3 @@ export const withUser = (C) => (props) => (
     { value => <C {...value} {...props} /> }
   </UserContext.Consumer>
 )
-

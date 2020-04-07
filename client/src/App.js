@@ -5,10 +5,13 @@ import Landing from "./Landing";
 import { Switch, Route } from "react-router-dom";
 import Nav from "./Nav";
 
+
 class App extends React.Component {
+  
   render() {
+    
     return (
-      <div className="App">
+      <div>
         <Nav />
         <Switch>
           <Route exact path="/" component={Landing} />
