@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # womenpreneurs-app
 Dummy data
 <br />
@@ -26,4 +26,4 @@ Zip:00000
 
 Confirm communication with Stripe within Google Dev tools. Stripe test Key is okay
 to be public for now, was not able to add as an .env variable.
->>>>>>> 1839da2b67c483ce501a0caccb86034581621ce2
+
