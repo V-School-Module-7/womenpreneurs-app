@@ -1,5 +1,6 @@
 import React from 'react';
-import PaymentForm from './PaymentForm.js'
+import './styles/styles.css';
+import PaymentForm from './PaymentForm.js';
 import {Elements} from '@stripe/react-stripe-js';
 import {loadStripe} from '@stripe/stripe-js';
 
