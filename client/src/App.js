@@ -1,20 +1,25 @@
-import React from 'react';
-import './styles/styles.css';
-import PaymentForm from './PaymentForm.js';
-import {Elements} from '@stripe/react-stripe-js';
-import {loadStripe} from '@stripe/stripe-js';
+import React from "react";
+import Auth from "./Auth";
+import Home from "./Home";
+import Landing from "./Landing";
+import { Switch, Route } from "react-router-dom";
+import Nav from "./Nav";
 
-const stripePromise = loadStripe('ppk_test_wsLcr2VwAVtzK2j7CaSLMjR0');
-
-const App = () => {
-  return (
-    <div className="App">
-        Womanpreneurs
-
-      <Elements stripe={stripePromise}>
-        <PaymentForm/>
-      </Elements>
-    </div>
-  );
+class App extends React.Component {
+  
+  render() {
+    
+    return (
+      <div>
+        <Nav />
+        <Switch>
+          <Route exact path="/" component={Landing} />
+          <Route path="/home" component={Home} />
+          <Route path="/auth" component={Auth} />
+        </Switch>
+      </div>
+    );
+  }
 }
+
 export default App;
