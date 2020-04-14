@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {loadStripe} from '@stripe/stripe-js';
 import './styles/styles.css';
+import { withRouter } from 'react-router-dom';
+import {withUser} from './context/UserProvider';
 import {CardElement, Elements, useStripe, useElements} from '@stripe/react-stripe-js';
 
 const CARD_OPTIONS = {
@@ -26,7 +28,6 @@ const CARD_OPTIONS = {
     },
   },
 };
-
 
 
 const CardField = ({onChange}) => (
@@ -161,8 +162,7 @@ const PaymentForm = () => {
         Payment successful
       </div>
       <div className="ResultMessage">
-        Thanks for trying Stripe Elements. No money was charged, but we
-        generated a PaymentMethod: {paymentMethod.id}
+        The type of card is: {paymentMethod.card.brand}
       </div>
       <ResetButton onClick={reset} />
     </div>
@@ -199,4 +199,4 @@ const PaymentForm = () => {
   );
 };
 
-export default PaymentForm
+export default withRouter(withUser(PaymentForm));

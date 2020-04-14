@@ -1,9 +1,12 @@
 import React from "react";
-import AddCard from "./AddCard"
 import { withRouter } from 'react-router-dom';
 import { withUser } from "./context/UserProvider";
 
+
+
 // const firebaseAppAuth = firebaseApp.Auth();
+
+
 
 class Auth extends React.Component {
   constructor() {
@@ -38,9 +41,10 @@ class Auth extends React.Component {
   };
 
   render() {
-
+   
     return (
       <div>
+      
         <form>
           <div>
             <label>Email address</label>
@@ -79,7 +83,7 @@ class Auth extends React.Component {
 
         </form>
         {this.state.authErrorMsg && this.state.authErrorMsg}
-        <AddCard/>
+    
       </div>
     );
   }

@@ -1,12 +1,10 @@
 import React from 'react';
-import axios from 'axios';
 import firebaseConfig from '../Firebase';
 import firebase from "firebase";
 require('dotenv').config();
 
 
 let fire = firebase.initializeApp(firebaseConfig);
-
 
 const UserContext = React.createContext();
 
@@ -99,6 +97,7 @@ class UserProvider extends React.Component {
 
   render() {    
     return (
+      
       <UserContext.Provider
         value={{
           ...this.state,
@@ -107,13 +106,11 @@ class UserProvider extends React.Component {
           logout: this.logout,
           showToken: this.showToken
         }}
-      >
+      > 
         { this.props.children }
       </UserContext.Provider>
     )
   }
-
-
 }
 
 export default UserProvider;
