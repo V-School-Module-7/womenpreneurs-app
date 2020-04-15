@@ -8,6 +8,8 @@ let fire = firebase.initializeApp(firebaseConfig);
 
 const UserContext = React.createContext();
 
+let storage = firebase.storage();
+
 class UserProvider extends React.Component {
   constructor() {
     super();
@@ -104,7 +106,8 @@ class UserProvider extends React.Component {
           signup: this.signup,
           login: this.login,
           logout: this.logout,
-          showToken: this.showToken
+          showToken: this.showToken,
+          
         }}
       > 
         { this.props.children }

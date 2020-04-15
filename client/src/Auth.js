@@ -2,10 +2,7 @@ import React from "react";
 import { withRouter } from 'react-router-dom';
 import { withUser } from "./context/UserProvider";
 
-
-
 // const firebaseAppAuth = firebaseApp.Auth();
-
 
 
 class Auth extends React.Component {
