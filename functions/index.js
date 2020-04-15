@@ -27,9 +27,3 @@ exports.createStripeCustomer = functions.auth.user().onCreate(async (user) => {
     return admin.firestore().collection('stripe_customers').doc(user.uid).set({customer_id: customer.id});
 });
 
-exports.startSubscription = functions.https.onCall(async(data,context) => {
-    const userId = context.auth.uid;
-    const userDoc = await db.doc(`users/${userId}`).get();
-
-})
-
