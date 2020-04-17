@@ -1,8 +1,12 @@
 import React from "react";
+import fire from './Firebase';
+import firebase from 'firebase';
+import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { withRouter } from 'react-router-dom';
 import { withUser } from "./context/UserProvider";
 
 // const firebaseAppAuth = firebaseApp.Auth();
+
 
 
 class Auth extends React.Component {
@@ -12,6 +16,21 @@ class Auth extends React.Component {
       email: "",
       password: ""
     };
+  }
+
+  
+  uiConfig = {
+    signInFlow: "popup",
+    signInOptions: [
+      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      firebase.auth.EmailAuthProvider.PROVIDER_ID
+    ],
+    callbacks: {
+      signInSuccess: () => {
+        this.props.login(fire.auth().currentUser);
+      }
+    },
+    signInSuccessUrl: '/home'
   }
 
   handleChange = e => {
@@ -38,11 +57,12 @@ class Auth extends React.Component {
   };
 
   render() {
-   
+
     return (
       <div>
       
         <form>
+
           <div>
             <label>Email address</label>
             <input
@@ -63,27 +83,29 @@ class Auth extends React.Component {
               placeholder="Password"
             />
           </div>
-
           <button
             type="submit"
             onClick={this.handleEmailPasswordLogin}
           >
             Login
           </button>
-
           <button
             onClick={this.handleEmailPasswordSignup}
             style={{ marginLeft: "25px" }}
           >
             Signup
           </button>
-
-        </form>
-        {this.state.authErrorMsg && this.state.authErrorMsg}
-    
+        </form> */}
+        {this.state.authErrorMsg && this.state.authErrorMsg} 
+      
+        <StyledFirebaseAuth
+            uiConfig={this.uiConfig}
+            firebaseAuth={fire.auth()}
+        />
       </div>
     );
   }
 }
+
 
 export default withRouter(withUser(Auth));
