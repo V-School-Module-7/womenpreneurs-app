@@ -5,6 +5,8 @@ import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { withRouter } from 'react-router-dom';
 import { withUser } from "./context/UserProvider";
 
+// const firebaseAppAuth = firebaseApp.Auth();
+
 
 
 class Auth extends React.Component {
@@ -15,6 +17,7 @@ class Auth extends React.Component {
       password: ""
     };
   }
+
   
   uiConfig = {
     signInFlow: "popup",
@@ -57,7 +60,9 @@ class Auth extends React.Component {
 
     return (
       <div>
-          {/* <form>
+      
+        <form>
+
           <div>
             <label>Email address</label>
             <input
@@ -97,10 +102,10 @@ class Auth extends React.Component {
             uiConfig={this.uiConfig}
             firebaseAuth={fire.auth()}
         />
-      
       </div>
     );
   }
 }
+
 
 export default withRouter(withUser(Auth));

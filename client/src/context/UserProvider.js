@@ -18,12 +18,9 @@ class UserProvider extends React.Component {
     }
   }
 
- 
-
   handleErrMsg = (errMsg) => {
     this.setState({authErrMsg: errMsg})
   }
-
 
   login = (user) => {
     console.log('in context', user)
@@ -58,10 +55,6 @@ class UserProvider extends React.Component {
       });
   }
 
-  // login = () => {
-  //   this.authListener();
-  // }
-
   logout = () => {
     fire
     .auth()
@@ -80,7 +73,6 @@ class UserProvider extends React.Component {
   authListener = () => {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        console.log('im in the auth listener if user')
         this.setState({
           user: user,
           uid: user.uid
@@ -89,7 +81,6 @@ class UserProvider extends React.Component {
           localStorage.setItem("user", user)
         console.log('local storage/state set item')
       } else {
-        console.log('im in the auth listener else user')
         this.setState({
           user: null,
           uid: null
@@ -114,11 +105,11 @@ class UserProvider extends React.Component {
           showToken: this.showToken
         }}
       >
+
         { this.props.children }
       </UserContext.Provider>
     )
   }
-
 
 }
 
@@ -129,4 +120,3 @@ export const withUser = (C) => (props) => (
   <UserContext.Consumer>
     { value => <C {...value} {...props} /> }
   </UserContext.Consumer>
-)
