@@ -1,9 +1,11 @@
 import React from "react";
-
+import fire from './Firebase';
+import firebase from 'firebase';
+import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { withRouter } from 'react-router-dom';
 import { withUser } from "./context/UserProvider";
 
-// const firebaseAppAuth = firebaseApp.Auth();
+
 
 class Auth extends React.Component {
   constructor() {
@@ -13,7 +15,20 @@ class Auth extends React.Component {
       password: ""
     };
   }
-
+  
+  uiConfig = {
+    signInFlow: "popup",
+    signInOptions: [
+      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      firebase.auth.EmailAuthProvider.PROVIDER_ID
+    ],
+    callbacks: {
+      signInSuccess: () => {
+        this.props.login(fire.auth().currentUser);
+      }
+    },
+    signInSuccessUrl: '/home'
+  }
 
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
@@ -42,7 +57,7 @@ class Auth extends React.Component {
 
     return (
       <div>
-        <form>
+          {/* <form>
           <div>
             <label>Email address</label>
             <input
@@ -75,8 +90,14 @@ class Auth extends React.Component {
           >
             Signup
           </button>
-        </form>
-        {this.state.authErrorMsg && this.state.authErrorMsg}
+        </form> */}
+        {this.state.authErrorMsg && this.state.authErrorMsg} 
+      
+        <StyledFirebaseAuth
+            uiConfig={this.uiConfig}
+            firebaseAuth={fire.auth()}
+        />
+      
       </div>
     );
   }

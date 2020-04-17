@@ -1,9 +1,8 @@
 import React from 'react';
 import axios from 'axios';
-import firebaseConfig from '../Firebase';
+import fire from '../Firebase';
 import firebase from "firebase";
 
-let fire = firebase.initializeApp(firebaseConfig);
 
 const UserContext = React.createContext();
 
@@ -59,6 +58,10 @@ class UserProvider extends React.Component {
       });
   }
 
+  // login = () => {
+  //   this.authListener();
+  // }
+
   logout = () => {
     fire
     .auth()
@@ -77,6 +80,7 @@ class UserProvider extends React.Component {
   authListener = () => {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
+        console.log('im in the auth listener if user')
         this.setState({
           user: user,
           uid: user.uid
@@ -85,6 +89,7 @@ class UserProvider extends React.Component {
           localStorage.setItem("user", user)
         console.log('local storage/state set item')
       } else {
+        console.log('im in the auth listener else user')
         this.setState({
           user: null,
           uid: null
@@ -102,6 +107,7 @@ class UserProvider extends React.Component {
       <UserContext.Provider
         value={{
           ...this.state,
+          
           signup: this.signup,
           login: this.login,
           logout: this.logout,
