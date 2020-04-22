@@ -120,3 +120,4 @@ export const withUser = (C) => (props) => (
   <UserContext.Consumer>
     { value => <C {...value} {...props} /> }
   </UserContext.Consumer>
+)
