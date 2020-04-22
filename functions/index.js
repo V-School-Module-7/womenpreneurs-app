@@ -1,3 +1,5 @@
+
+
 /**
  * Copyright 2016 Google Inc. All Rights Reserved.
  *
@@ -26,4 +28,5 @@ exports.createStripeCustomer = functions.auth.user().onCreate(async (user) => {
     const customer = await stripe.customers.create({email: user.email});
     return admin.firestore().collection('stripe_customers').doc(user.uid).set({customer_id: customer.id});
 });
+
 

@@ -1,14 +1,10 @@
 import React from 'react';
-import firebaseConfig from '../Firebase';
+import axios from 'axios';
+import fire from '../Firebase';
 import firebase from "firebase";
-require('dotenv').config();
 
-
-let fire = firebase.initializeApp(firebaseConfig);
 
 const UserContext = React.createContext();
-
-let storage = firebase.storage();
 
 class UserProvider extends React.Component {
   constructor() {
@@ -99,21 +95,22 @@ class UserProvider extends React.Component {
 
   render() {    
     return (
-      
       <UserContext.Provider
         value={{
           ...this.state,
+          
           signup: this.signup,
           login: this.login,
           logout: this.logout,
-          showToken: this.showToken,
-          
+          showToken: this.showToken
         }}
-      > 
+      >
+
         { this.props.children }
       </UserContext.Provider>
     )
   }
+
 }
 
 export default UserProvider;
@@ -123,4 +120,3 @@ export const withUser = (C) => (props) => (
   <UserContext.Consumer>
     { value => <C {...value} {...props} /> }
   </UserContext.Consumer>
-)

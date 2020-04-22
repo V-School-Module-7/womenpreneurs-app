@@ -1,9 +1,9 @@
-
+import firebase from 'firebase';
 require('dotenv').config();
 
 //config object, plugs into firebase
 const firebaseConfig = {
-  apiKey:process.env.REACT_APP_API_KEY,
+  apiKey: process.env.REACT_APP_API_KEY,
   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
   databaseURL: process.env.REACT_APP_DATABASE_URL,
   projectId: process.env.REACT_APP_PROJECT_ID,
@@ -12,4 +12,9 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_APP_ID
 };
 
-export default firebaseConfig;
+
+let fire = firebase.initializeApp(firebaseConfig);
+
+
+export default fire;
+
