@@ -18,7 +18,8 @@ class Nav extends React.Component {
   render() {
     return (
       <div style={{width: '100%', height: '100px', display: 'flex', alignItems: 'center'}}>
-        {this.props.uid ? <button style={{marginLeft: '40px'}} onClick={this.handleLogout}>Logout</button> : <Link to='/auth' style={{marginLeft: '40px'}}>Login</Link> }
+        <Link to='/home'>Home</Link>
+        {this.props.uid ? <button style={{marginLeft: '40px'}} onClick={this.handleLogout}>Logout</button> : <Link to='/auth' style={{marginLeft: '40px'}}>Login/Signup</Link> }
       <button onClick={this.handleShowUser}>Log User Token</button>
       <div>{this.props.uid ? <Link to='/paymentform' style={{marginLeft: '40px'}}>Payment Form</Link> : ""}</div> 
       </div>
