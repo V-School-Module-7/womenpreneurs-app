@@ -8,7 +8,7 @@ let fire = firebase.initializeApp(firebaseConfig);
 
 const UserContext = React.createContext();
 
-let storage = firebase.storage();
+// let storage = firebase.storage();
 
 class UserProvider extends React.Component {
   constructor() {
@@ -18,13 +18,15 @@ class UserProvider extends React.Component {
       //keep in state in production? 
       user: localStorage.getItem("user") || {},
       uid: localStorage.getItem("uid") || "",
-      authErrMsg: ''
+      // authErrMsg: ''
     }
   }
 
-  handleErrMsg = (errMsg) => {
-    this.setState({authErrMsg: errMsg})
-  }
+  // handleErrorMessage = () => {
+  //   this.setState({
+  //     authErrMsg: ''
+  //   })
+  // }
 
   login = (user) => {
     console.log('in context', user)
@@ -34,11 +36,11 @@ class UserProvider extends React.Component {
       .then(loggedInUser => {
         console.log('in .then login context loggedin', loggedInUser)
         this.authListener();
+        window.location.href = window.location.origin + '/home';
       })
       .catch(error => {
-        this.setState({
-          authErrorMsg: error.message
-        });
+        console.log(error)
+        return error
       });
   }
 
@@ -50,12 +52,11 @@ class UserProvider extends React.Component {
       .then(createdUser => {
         console.log('in .then() create user context', createdUser);
         this.authListener();
+        window.location.href = window.location.origin + '/linkedin';
       })
       .catch(error => {
         console.log(error);
-        this.setState({
-          authErrorMsg: error.message
-        });
+        return error
       });
   }
 
@@ -82,32 +83,31 @@ class UserProvider extends React.Component {
           uid: user.uid
         });
           localStorage.setItem("uid", user.uid);
-          localStorage.setItem("user", user)
-        console.log('local storage/state set item')
+          localStorage.setItem("user", user);
+        console.log('local storage/state set item');
       } else {
         this.setState({
           user: null,
           uid: null
         });
-        console.log('local storage remove')
+        console.log('local storage remove');
         localStorage.removeItem("user");
-        localStorage.removeItem("uid")
+        localStorage.removeItem("uid");
+        // window.location.href = window.location.origin + '/home';
       }
-    });
+    })
   };
-
 
   render() {    
     return (
       
       <UserContext.Provider
         value={{
-          ...this.state,
           signup: this.signup,
           login: this.login,
           logout: this.logout,
           showToken: this.showToken,
-          
+          ...this.state,
         }}
       > 
         { this.props.children }

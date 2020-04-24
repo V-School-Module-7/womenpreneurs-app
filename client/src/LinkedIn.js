@@ -49,7 +49,7 @@ class LinkedIn extends React.Component {
   render() {
     return (
       <CenteredContainer>
-        <PageTitle>Account Setup</PageTitle>
+        <PageTitle>Account Details</PageTitle>
         <img
           style={{ width: "200px" }}
           src="https://content.linkedin.com/content/dam/developer/global/en_US/site/img/signin-button.png"
@@ -78,7 +78,7 @@ class LinkedIn extends React.Component {
           <FormInput placeholder="company name" />
           <FormInput placeholder="your industry" />
           <FormInput placeholder="interests" />
-          <FormButton onSubmit={this.handleSubmit}>Submit</FormButton>
+          <FormButton primary onSubmit={this.handleSubmit}>Submit</FormButton>
         </Form>
       </CenteredContainer>
     );
