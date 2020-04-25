@@ -4,6 +4,7 @@ import FormInput from "./components/Forms/FormInput";
 import FormButton from "./components/Forms/FormButton";
 import CenteredContainer from "./components/Containers/CenteredPageContainer";
 import FormTitle from "./components/Forms/FormTitle";
+import SignUpForm from './SignUpForm';
 import { withRouter } from 'react-router-dom';
 import { withUser } from "./context/UserProvider";
 import fire from './context/UserProvider'
@@ -123,42 +124,16 @@ class Auth extends React.Component {
         //ternary else
         :
         //
-        <>
-        <span style={{display: 'flex'}}><p>Already a member?</p><p onClick={this.handleLoginOrSignup} style={{color: '#8B7071', marginLeft: '4px' }}>Log in</p></span>
-
-        <Form>
-        <FormTitle>Sign up</FormTitle>
-        <p style={{color: 'grey', marginBottom: '35px', fontStyle: 'italic'}}>
-          Clicking sign up will create an account with your entered
-          email and password, and continue to
-          personalize your account.
-        </p>
-            <FormInput
-              value={this.state.email}
-              onChange={this.handleChange}
-              type="email"
-              name="email"
-              placeholder="Email"
-              required='required'
-            />
-            <FormInput
-              value={this.state.password}
-              onChange={this.handleChange}
-              type="password"
-              name="password"
-              placeholder="Password"
-              required='required'
-            />
-          <FormButton
-            primary
-            type="submit"
-            onClick={this.nextStep}
-          >
-            Continue
-          </FormButton>
-          
-        </Form>
-        </>
+        <SignUpForm 
+          handleChange={this.handleChange}
+          handleEmailPasswordSignup={this.handleEmailPasswordSignup}
+          nextStep={this.nextStep} 
+          previousStep={this.previousStep} 
+          handleEmailPasswordSignup={this.handleEmailPasswordSignup}  
+          email={this.state.email}
+          password={this.state.password}
+          step={this.state.step}
+        />
       }
 
         {this.state.authErrMsg && this.state.authErrMsg}
