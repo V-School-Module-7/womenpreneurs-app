@@ -9,14 +9,10 @@ import FormTitle from "./components/Forms/FormTitle";
 
 
 
-//things linkedin account has
-// profile picture
-// current employer
-// personal statement
-// location
-// alma mater
-// employment history
-// connection
+// ---- things they want from linkedin ----
+// Name, title, organization, city/metro area, 
+// profile pic, about and link to Linkedin 
+//  --------------------------------------
 
 class LinkedIn extends React.Component {
   constructor() {
@@ -54,30 +50,12 @@ class LinkedIn extends React.Component {
           style={{ width: "200px" }}
           src="https://content.linkedin.com/content/dam/developer/global/en_US/site/img/signin-button.png"
         />
-        {/* <form>
-          <input
-            placeholder="first name"
-            name="firstName"
-            onChange={this.handleChange}
-          />
-          <input
-            placeholder="last name"
-            name="lastName"
-            onChange={this.handleChange}
-          />
-          <input
-            placeholder="company name"
-            name="companyName"
-            onChange={this.handleChange}
-          />
-          <button onSubmit={this.handleSubmit}>Submit</button>
-        </form> */}
         <Form>
           <FormInput placeholder="first name" />
           <FormInput placeholder="last name" />
+          <FormInput placeholder="title" />
           <FormInput placeholder="company name" />
-          <FormInput placeholder="your industry" />
-          <FormInput placeholder="interests" />
+          <FormInput placeholder="LinkedIn account url, ex. linkedin.com/in/janesmith" />
           <FormButton primary onSubmit={this.handleSubmit}>Submit</FormButton>
         </Form>
       </CenteredContainer>

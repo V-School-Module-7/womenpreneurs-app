@@ -22,7 +22,8 @@ class Auth extends React.Component {
       email: "",
       password: "",
       loggingIn: true,
-      authErrMsg: ""
+      authErrMsg: "",
+      step: 0
     };
   }
 
@@ -67,8 +68,19 @@ class Auth extends React.Component {
 
   handleLoginOrSignup = () => {
     this.setState({
-      loggingIn: !this.state.loggingIn
+      loggingIn: !this.state.loggingIn,
     })
+  }
+
+  nextStep = e => {
+   e.preventDefault();
+   this.setState({ step: this.state.step + 1 })
+
+  }
+
+  previousStep = e => {
+    e.preventDefault();
+    this.setState({ step: this.state.step - 1 })
   }
 
 
@@ -86,7 +98,7 @@ class Auth extends React.Component {
               onChange={this.handleChange}
               type="email"
               name="email"
-              placeholder="Enter email"
+              placeholder="Email"
               required='required'
             />
             <FormInput
@@ -105,8 +117,6 @@ class Auth extends React.Component {
           >
             Login
           </FormButton>
-          {/* <div style={{alignSelf: 'center', width: '1px', height: '40px', backgroundColor: 'lightgrey', marginLeft: '10px', marginRight: '10px'}}></div> */}
-          {/* <h4>create account</h4> */}
           </div>
         </Form>
         </>
@@ -128,7 +138,7 @@ class Auth extends React.Component {
               onChange={this.handleChange}
               type="email"
               name="email"
-              placeholder="Enter email"
+              placeholder="Email"
               required='required'
             />
             <FormInput
@@ -139,17 +149,14 @@ class Auth extends React.Component {
               placeholder="Password"
               required='required'
             />
-          <div style={{display: 'flex', justifyContent: 'space-around', width: '100%'}}>
-          {/* <div style={{alignSelf: 'center', width: '1px', height: '40px', backgroundColor: 'lightgrey', marginLeft: '10px', marginRight: '10px'}}></div> */}
           <FormButton
             primary
             type="submit"
-            onClick={this.handleEmailPasswordSignup}
+            onClick={this.nextStep}
           >
-            Signup
+            Continue
           </FormButton>
-          {/* <h4>create account</h4> */}
-          </div>
+          
         </Form>
         </>
       }
