@@ -11,7 +11,7 @@ class SignUpOne extends React.Component {
         <span style={{ display: "flex" }}>
           <p>Already a member?</p>
           <p
-            onClick={this.handleLoginOrSignup}
+            onClick={this.props.handleLoginOrSignup}
             style={{ color: "#8B7071", marginLeft: "4px" }}
           >
             Log in
@@ -26,21 +26,21 @@ class SignUpOne extends React.Component {
             password, and continue to personalize your account.
           </p>
           <FormInput
-            onChange={this.handleChange}
+            onChange={this.props.handleChange}
             type="email"
             name="email"
             placeholder="Email"
             required="required"
           />
           <FormInput
-            onChange={this.handleChange}
+            onChange={this.props.handleChange}
             type="password"
             name="password"
             placeholder="Password"
             required="required"
           />
           <FormButton primary onClick={this.props.nextStep}>
-            Continue
+            Next
           </FormButton>
         </Form>
       </>

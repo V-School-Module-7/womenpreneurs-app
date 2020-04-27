@@ -7,7 +7,6 @@ import FormTitle from "./components/Forms/FormTitle";
 import SignUpForm from './SignUpForm';
 import { withRouter } from 'react-router-dom';
 import { withUser } from "./context/UserProvider";
-import fire from './context/UserProvider'
 
 
 
@@ -62,6 +61,11 @@ class Auth extends React.Component {
     }
 
     this.props.signup(userObj)
+      //.then(user => {
+      //firestorage.addthing(userobj , {
+        //stuff from the form to add to user obj in db 
+      //})
+      //})
     
     // this.props.history.push('/linkedIn');
     
@@ -69,7 +73,7 @@ class Auth extends React.Component {
 
   handleLoginOrSignup = () => {
     this.setState({
-      loggingIn: !this.state.loggingIn,
+      loggingIn: !this.state.loggingIn
     })
   }
 
@@ -133,6 +137,9 @@ class Auth extends React.Component {
           email={this.state.email}
           password={this.state.password}
           step={this.state.step}
+          loggingIn={this.state.loggingIn}
+          handleLoginOrSignup={this.handleLoginOrSignup}
+         {...this.state}
         />
       }
 

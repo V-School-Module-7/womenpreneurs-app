@@ -25,6 +25,7 @@ class SignUpForm extends React.Component {
   render() {
     if (this.props.step === 0) {
       return <SignUpOne 
+              handleLoginOrSignup={this.props.handleLoginOrSignup}
               nextStep={this.props.nextStep}
               handleChange={this.props.handleChange}
              />
@@ -45,6 +46,7 @@ class SignUpForm extends React.Component {
                handleSubmit={this.props.handleSubmit}
                previousStep={this.props.previousStep}
                handleChange={this.props.handleChange}
+               {...this.props}
              />
     }
   }

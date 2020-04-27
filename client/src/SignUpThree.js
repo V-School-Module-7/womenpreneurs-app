@@ -7,6 +7,7 @@ import CenteredContainer from "./components/Containers/CenteredPageContainer";
 import PageTitle from "./components/Titles/PageTitle";
 import IncrementButton from "./components/Forms/IncrementButton";
 import DecrementButton from "./components/Forms/DecrementButton";
+import FormLabel from "./components/Forms/FormLabel";
 
 class SignUpThree extends React.Component {
   constructor() {
@@ -45,17 +46,19 @@ class SignUpThree extends React.Component {
           src="https://content.linkedin.com/content/dam/developer/global/en_US/site/img/signin-button.png"
         />
         <Form>
-          <FormInput placeholder="first name" />
-          <FormInput placeholder="last name" />
-          <FormInput placeholder="title" />
-          <FormInput placeholder="company name" />
-          <FormInput placeholder="LinkedIn account url, ex. linkedin.com/in/janesmith" />
-          <IncrementButton primary onClick={this.props.nextStep}>
-            Continue
-          </IncrementButton>
-          <DecrementButton primary onClick={this.props.previousStep}>
-            Back
-          </DecrementButton>
+          <FormInput name='firstName' onChange={this.props.handleChange} placeholder="first name" />
+          <FormInput name='lastName' onChange={this.props.handleChange} placeholder="last name" />
+          <FormInput name='title' onChange={this.props.handleChange} placeholder="title" />
+          <FormInput name='companyName' onChange={this.props.handleChange} placeholder="company name" />
+          <FormInput name='linkedinUrl' onChange={this.props.handleChange} placeholder="linkedin.com/in/myname" />
+          <span style={{display: 'flex', justifyContent: 'space-around', width: '297px'}}>
+            <DecrementButton primary onClick={this.props.previousStep}>
+              ◀ Back
+            </DecrementButton>
+            <IncrementButton primary onClick={this.props.nextStep}>
+              Next ▶
+            </IncrementButton>
+          </span>
         </Form>
       </CenteredContainer>
     );
