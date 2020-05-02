@@ -95,7 +95,7 @@ class Auth extends React.Component {
           >
             Signup
           </button>
-        </form> */}
+        </form> 
         {this.state.authErrorMsg && this.state.authErrorMsg} 
       
         <StyledFirebaseAuth
