@@ -63,7 +63,7 @@ const SignUpTwo = (props) => {
   //need to get &state off of the linkedin code before submitting function
   // check linkedCode in devtools.
 
-  const getData = async () => {
+  const getData = async function() {
     let getLinkedinUser = fire.functions().httpsCallable('linkedinUser')
     let result = await getLinkedinUser({linkedinUser: linkedCode});
     if (result) {

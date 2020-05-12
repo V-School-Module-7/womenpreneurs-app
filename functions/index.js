@@ -25,21 +25,19 @@ const logging = require('@google-cloud/logging');
 // const stripe = require('stripe')(functions.config().stripe.token);
 // const currency = functions.config().stripe.currency || 'USD';
 
-// // When a user is created, automatically create an associated Stripe ID, even if not a paying cx
+// When a user is created, automatically create an associated Stripe ID, even if not a paying cx
 // exports.createStripeCustomer = functions.auth.user().onCreate(async (user) => {
 //     const customer = await stripe.customers.create({email: user.email});
 //     return admin.firestore().collection('stripe_customers').doc(user.uid).set({customer_id: customer.id});
 // });
 
-// need to pass code from useEffect call in signup3 component
-// then return that info to the frontend
 
 exports.linkedinUser = functions.https.onCall((data, context) => {
     
     console.log('hello logging');
     //data.linkedinUser is the "code"
     console.log('data.linkedinUser', data.linkedinUser);
-    axios.get("https://www.linkedin.com/oauth/v2/accessToken", { 
+    return axios.get("https://www.linkedin.com/oauth/v2/accessToken", { 
         params: {
             grant_type: "authorization_code",
             code: `${data.linkedinUser}`,
@@ -64,7 +62,7 @@ exports.linkedinUser = functions.https.onCall((data, context) => {
             })
             .then((res) => {
                 console.log(res.data)
-                return res
+                return res.data
             })
             .catch((err) => {
                 console.log(err)
