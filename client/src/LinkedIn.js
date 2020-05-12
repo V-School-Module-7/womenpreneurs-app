@@ -14,15 +14,8 @@ import FormTitle from "./components/Forms/FormTitle";
 // profile pic, about and link to Linkedin 
 //  --------------------------------------
 
-class LinkedIn extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      firstName: "",
-      lastName: "",
-      companyName: "",
-    };
-  }
+const LinkedIn = (props) => {
+  
 
   // NOTE: REFACTOR TO USE STYLED COMPONENTS!!!
   // handlechange of input to set state for name of input
@@ -33,16 +26,16 @@ class LinkedIn extends React.Component {
   // will users want different profile pictures vs their linkedin photos?
   // ex. list dayjob employer on linkedin, but list your startup on womanpreneurs
 
-  handleChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
+  // const [firstName, setFirstName] = useState('');
+  // const [LastName, setLastName] = useState('');
+  // const [companyName, setcompanyName] = useState('');
 
-  handleSubmit = (e) => {
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     alert("submitted");
   };
 
-  render() {
     return (
       <CenteredContainer>
         <PageTitle>Account Details</PageTitle>
@@ -56,11 +49,10 @@ class LinkedIn extends React.Component {
           <FormInput placeholder="title" />
           <FormInput placeholder="company name" />
           <FormInput placeholder="LinkedIn account url, ex. linkedin.com/in/janesmith" />
-          <FormButton primary onSubmit={this.handleSubmit}>Submit</FormButton>
+          <FormButton primary onSubmit={handleSubmit}>Submit</FormButton>
         </Form>
       </CenteredContainer>
     );
-  }
 }
 
 export default LinkedIn;

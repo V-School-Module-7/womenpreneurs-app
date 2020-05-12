@@ -17,13 +17,62 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
+// const cors = require('cors')({
+//     origin: true,
+//   });
+const axios = require('axios');
 const logging = require('@google-cloud/logging');
-const stripe = require('stripe')(functions.config().stripe.token);
-const currency = functions.config().stripe.currency || 'USD';
+// const stripe = require('stripe')(functions.config().stripe.token);
+// const currency = functions.config().stripe.currency || 'USD';
 
-// When a user is created, automatically create an associated Stripe ID, even if not a paying cx
-exports.createStripeCustomer = functions.auth.user().onCreate(async (user) => {
-    const customer = await stripe.customers.create({email: user.email});
-    return admin.firestore().collection('stripe_customers').doc(user.uid).set({customer_id: customer.id});
-});
+// // When a user is created, automatically create an associated Stripe ID, even if not a paying cx
+// exports.createStripeCustomer = functions.auth.user().onCreate(async (user) => {
+//     const customer = await stripe.customers.create({email: user.email});
+//     return admin.firestore().collection('stripe_customers').doc(user.uid).set({customer_id: customer.id});
+// });
+
+// need to pass code from useEffect call in signup3 component
+// then return that info to the frontend
+
+exports.linkedinUser = functions.https.onCall((data, context) => {
+    
+    console.log('hello logging');
+    //data.linkedinUser is the "code"
+    console.log('data.linkedinUser', data.linkedinUser);
+    axios.get("https://www.linkedin.com/oauth/v2/accessToken", { 
+        params: {
+            grant_type: "authorization_code",
+            code: `${data.linkedinUser}`,
+            redirect_uri: "http://localhost:3000/acctsetup",
+            client_id: "86pzo1h1r9o6iu",
+            client_secret: "RO4LMC5jDR2r4VHM"
+        }
+      })
+        .then((res) => {
+            console.log('response data', res.data);
+            let response = res.data;
+            return response
+        })
+        .then((response) => {
+            console.log('response in next then', response)
+            // make second request to linkedin for the user info
+            // respones.access_token
+            return axios.get('https://api.linkedin.com/v2/me?projection=(id,firstName,lastName,profilePicture(displayImage~:playableStreams))', {
+                headers: {
+                    Authorization: `Bearer ${response.access_token}`
+                }
+            })
+            .then((res) => {
+                console.log(res.data)
+                return res
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        }) 
+})
+
 

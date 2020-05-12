@@ -7,22 +7,26 @@ import Global from "./components/Containers/Global";
 import LinkedIn from "./LinkedIn";
 import { Switch, Route } from "react-router-dom";
 import Nav from "./Nav";
+import SignUpTwo from "./SignUpTwo";
 
 class App extends React.Component {
   
   render() {
     
     return (
-      <Global>
+      <div>
+        {/* injects global styles for html body */}
+        <Global />
         <Nav />
         <Switch>
           <Route exact path="/" component={Landing} />
           <Route path="/home" component={Home} />
           <Route path="/auth" component={Auth} />
+          <Route path="/acctsetup" component={SignUpTwo} />
           <Route path="/linkedin" component={LinkedIn} />
           <Route path="/paymentform" component={PaymentForm} />
         </Switch>
-      </Global>
+      </div>
     );
   }
 }

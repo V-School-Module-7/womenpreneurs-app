@@ -1,68 +1,50 @@
 import React from "react";
 import Form from "./components/Forms/Form";
 import FormInput from "./components/Forms/FormInput";
-import FormButton from "./components/Forms/FormButton";
-// import FormTitle from "./components/Forms/FormTitle";
-import CenteredContainer from "./components/Containers/CenteredPageContainer";
-import PageTitle from "./components/Titles/PageTitle";
+import FormTextArea from "./components/Forms/FormTextArea";
 import IncrementButton from "./components/Forms/IncrementButton";
 import DecrementButton from "./components/Forms/DecrementButton";
+import FormTitle from "./components/Forms/FormTitle";
+import CenteredContainer from "./components/Containers/CenteredPageContainer";
 import FormLabel from "./components/Forms/FormLabel";
 
-class SignUpThree extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      firstName: "",
-      lastName: "",
-      companyName: "",
-    };
-  }
-
-  // NOTE: REFACTOR TO USE STYLED COMPONENTS!!!
-  // handlechange of input to set state for name of input
-  // submit button submits the user info && connects to firestore
-  // will use UID saved from account creation for name of document in storage
-  // can users email be used to populate form?
-  // should linkedin connection populate form, you confirm, then continue?
-  // will users want different profile pictures vs their linkedin photos?
-  // ex. list dayjob employer on linkedin, but list your startup on womanpreneurs
-
-  // handleChange = (e) => {
-  //   this.setState({ [e.target.name]: e.target.value });
-  // };
-
-  // handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   alert("submitted");
-  // };
-
+class SignUpTwo extends React.Component {
   render() {
     return (
       <CenteredContainer>
-        <PageTitle>Account Details</PageTitle>
-        <img
-          style={{ width: "200px" }}
-          src="https://content.linkedin.com/content/dam/developer/global/en_US/site/img/signin-button.png"
-        />
+        <FormTitle>Questionnaire</FormTitle>
+        {/* <span style={{width: '300px', display: 'flex'}}><p>Take a moment to read about our</p><p style={{color: '#8B7071', marginLeft: '4px' }}>values and intention</p></span> */}
         <Form>
-          <FormInput name='firstName' onChange={this.props.handleChange} placeholder="first name" />
-          <FormInput name='lastName' onChange={this.props.handleChange} placeholder="last name" />
-          <FormInput name='title' onChange={this.props.handleChange} placeholder="title" />
-          <FormInput name='companyName' onChange={this.props.handleChange} placeholder="company name" />
-          <FormInput name='linkedinUrl' onChange={this.props.handleChange} placeholder="linkedin.com/in/myname" />
-          <span style={{display: 'flex', justifyContent: 'space-around', width: '297px'}}>
-            <DecrementButton primary onClick={this.props.previousStep}>
-              ◀ Back
-            </DecrementButton>
-            <IncrementButton primary onClick={this.props.nextStep}>
-              Next ▶
-            </IncrementButton>
-          </span>
+          {/* <FormLabel>Do you agree with our values?</FormLabel>
+          <div style={{alignSelf: 'flex-start'}}>
+            <FormLabel>Yes</FormLabel>
+            <button type='radio'></button>
+            <FormLabel>No</FormLabel>
+            <button type='radio'></button>
+          </div> */}
+          <FormLabel>What are you currently working on?</FormLabel>
+          <FormTextArea onChange={this.props.handleChange} name='current'/>
+          <FormLabel>What are some things you need help with right now?</FormLabel>
+          <FormTextArea onChange={this.props.handleChange} name='helpWith'/>
+          <FormLabel>
+            How might you positively impact the Ascenda community?
+            What do you enjoy helping with the most?
+          </FormLabel>
+          <FormTextArea onChange={this.props.handleChange} name='impactGoal'/>
+          <FormLabel>What are you most proud of?</FormLabel>
+          <FormTextArea onChange={this.props.handleChange} name='accomplishment' />
         </Form>
+        <span style={{display: 'flex', justifyContent: 'space-around', width: '297px'}}>
+        <DecrementButton primary onClick={this.props.previousStep}>
+          ◀ Back
+        </DecrementButton>
+        <IncrementButton primary onClick={this.props.nextStep}>
+          Next ▶
+        </IncrementButton>
+        </span>
       </CenteredContainer>
     );
   }
 }
 
-export default SignUpThree;
+export default SignUpTwo;

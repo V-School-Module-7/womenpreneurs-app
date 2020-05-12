@@ -4,9 +4,35 @@ import FormInput from "./components/Forms/FormInput";
 import FormButton from "./components/Forms/FormButton";
 import CenteredContainer from "./components/Containers/CenteredPageContainer";
 import FormTitle from "./components/Forms/FormTitle";
+import Horizontal from "./components/Logos/Horizontal";
 import SignUpForm from './SignUpForm';
 import { withRouter } from 'react-router-dom';
 import { withUser } from "./context/UserProvider";
+import SignInForm from "./SignInForm";
+
+
+//=================================================
+//STEPS: 
+// NOTE: WORKING IN SIGNUP FLOW, HAVENT TRIED SIGNIN
+// 1) redirect user to linkedin sign in screen
+// 2) retrieve access code from redirect url to /acctsetup (signup) or /home (signin)
+// 3) immediately send post request to linkedin asking for the access token
+// 4) start making requests using access token
+
+// NOTE: THIS URL WORKED FOR GETTING OAUTH ACCESS TOKEN 
+// https://www.linkedin.com/oauth/v2/accessToken?client_id=86pzo1h1r9o6iu&client_secret=RO4LMC5jDR2r4VHM&grant_type=authorization_code&redirect_uri=http://localhost:3000/acctsetup&code=AQQB6PVQWoSjS-gTu4gZ020nITfSyUTdJjZCUDsVfz3Sdjif10gJxk0RUfcRtZwlYUIbUnYo7eIApPr4o0j9tISkTET1TP2gPqavYlQOHO3E6vwq39CW8axISdFqFQOVrlNtE1tjU_AKuslEp7Nm-ocNZxOSMKyAUJMhDpQ_6gSBFJ0vqfX-96iFIYAAbg
+// Will i need to make cloud function call to do any of this?
+// ACCESS TOKEN: AQWmrGB17JQzNSX4pIuppHVCf5F9dcslqvUnBkqicUaenz7K2z9ema4gnGBcyO5FnIPTBS6h2cKaLZOrpG-336pG-uqAZS1oubf-l8K-BGiPqjaKzRM7RgvCFD1-6kOW08sBtLaYFNnOWhv4zQM2BBTGja3SB6vSD5KLzMTT1P_9Z5unixS_rEIJ2uXjVS0DIgF7C5AVkFinUL27O9XAjEntEpJTReAWX7_G_7JsCruXaXq3KYHlnQA7FTcg2OsCBSatf71cFKbpuxgNfPIJc4_5E_Od81VLm8rSIcn-UiaIOgiO8octZfHzxeHxxiAtgVX1lmSBlH186bzQguMNu97SNfL1rg
+// GET REQUEST TO BASIC PROFILE HEADER INCLUDES 'Bearer: <ACCESSTOKEN>'
+// GET--> https://api.linkedin.com/v2/me?oauth2_access_token=AQWmrGB17JQzNSX4pIuppHVCf5F9dcslqvUnBkqicUaenz7K2z9ema4gnGBcyO5FnIPTBS6h2cKaLZOrpG-336pG-uqAZS1oubf-l8K-BGiPqjaKzRM7RgvCFD1-6kOW08sBtLaYFNnOWhv4zQM2BBTGja3SB6vSD5KLzMTT1P_9Z5unixS_rEIJ2uXjVS0DIgF7C5AVkFinUL27O9XAjEntEpJTReAWX7_G_7JsCruXaXq3KYHlnQA7FTcg2OsCBSatf71cFKbpuxgNfPIJc4_5E_Od81VLm8rSIcn-UiaIOgiO8octZfHzxeHxxiAtgVX1lmSBlH186bzQguMNu97SNfL1rg
+// WILL THEN TAKE DATA AND KEEP IN STATE OR STORE IN FIREBASE
+// NEED TO GET ACCESS TO MORE PROFILE INFORMATION AND PICTURE
+// profile endpoints include: localizedLastName & localizedFirstName,
+// profilePicture.displayImage, id
+// NOTE: NEED TO GET FULL PROFILE ACCESS
+//
+//=================================================
+
 
 
 
@@ -25,7 +51,10 @@ class Auth extends React.Component {
       authErrMsg: "",
       step: 0
     };
+
   }
+
+
 
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
@@ -67,8 +96,7 @@ class Auth extends React.Component {
       //})
       //})
     
-    // this.props.history.push('/linkedIn');
-    
+    // this.props.history.push('/linkedIn'); 
   };
 
   handleLoginOrSignup = () => {
@@ -91,56 +119,30 @@ class Auth extends React.Component {
 
   render() {
    
+    console.log(typeof this.state.step)
+
     return (
       <CenteredContainer>
       {this.state.loggingIn ?
-      <>
-      <span style={{display: 'flex'}}><p>Not yet a member?</p><p onClick={this.handleLoginOrSignup} style={{color: '#8B7071', marginLeft: '4px' }}>sign up</p></span>
-      <Form>
-        <FormTitle>Log in</FormTitle>
-            <FormInput
-              value={this.state.email}
-              onChange={this.handleChange}
-              type="email"
-              name="email"
-              placeholder="Email"
-              required='required'
-            />
-            <FormInput
-              value={this.state.password}
-              onChange={this.handleChange}
-              type="password"
-              name="password"
-              placeholder="Password"
-              required='required'
-            />
-          <div style={{display: 'flex', justifyContent: 'space-around', width: '100%'}}>
-          <FormButton
-            primary
-            type="submit"
-            onClick={this.handleEmailPasswordLogin}
-          >
-            Login
-          </FormButton>
-          </div>
-        </Form>
-        </>
-        //ternary else
-        :
-        //
-        <SignUpForm 
-          handleChange={this.handleChange}
-          handleEmailPasswordSignup={this.handleEmailPasswordSignup}
-          nextStep={this.nextStep} 
-          previousStep={this.previousStep} 
-          handleEmailPasswordSignup={this.handleEmailPasswordSignup}  
-          email={this.state.email}
-          password={this.state.password}
-          step={this.state.step}
-          loggingIn={this.state.loggingIn}
+        <SignInForm 
           handleLoginOrSignup={this.handleLoginOrSignup}
-         {...this.state}
         />
+        :
+        <>
+          <SignUpForm 
+            handleChange={this.handleChange}
+            handleEmailPasswordSignup={this.handleEmailPasswordSignup}
+            nextStep={this.nextStep} 
+            previousStep={this.previousStep} 
+            handleEmailPasswordSignup={this.handleEmailPasswordSignup}  
+            email={this.state.email}
+            password={this.state.password}
+            step={this.state.step}
+            loggingIn={this.state.loggingIn}
+            handleLoginOrSignup={this.handleLoginOrSignup}
+          {...this.state}
+          />
+        </>
       }
 
         {this.state.authErrMsg && this.state.authErrMsg}

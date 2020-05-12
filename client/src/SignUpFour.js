@@ -22,6 +22,18 @@ class SignUpFour extends React.Component {
             name="email"
             value={this.props.email}
           />
+          <FormInput
+            onChange={this.props.handleChange}
+            type="password"
+            name="password"
+            value={this.props.password}
+            required="required"
+          />
+          <FormInput name='firstName' onChange={this.props.handleChange} value={this.props.firstName} />
+          <FormInput name='lastName' onChange={this.props.handleChange} value={this.props.lastName}/>
+          <FormInput name='title' onChange={this.props.handleChange} value={this.props.title} />
+          <FormInput name='companyName' onChange={this.props.handleChange} value={this.props.companyName} />
+          <FormInput name='linkedinUrl' onChange={this.props.handleChange} value={this.props.linkedinUrl} />
           <FormLabel>What are you currently working on?</FormLabel>
           <FormTextArea onChange={this.props.handleChange} name='current' value={this.props.current} />
           <FormLabel>What are some things you need help with right now?</FormLabel>

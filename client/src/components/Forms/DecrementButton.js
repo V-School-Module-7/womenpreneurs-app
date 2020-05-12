@@ -4,6 +4,7 @@ import styled from "styled-components";
 const DecrementButton = styled.button`
   width: 136px;
   height: 48px;
+  margin-bottom: 24px;
   font-size: 16px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.10);
   border-radius: 8px;

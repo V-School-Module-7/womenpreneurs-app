@@ -1,9 +1,14 @@
-import styled from "styled-components";
+import { createGlobalStyle } from "styled-components";
 
 
-const Global = styled.div`
+const Global = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
-  font-family: 'Open Sans', sans-serif;
+  
+  html,body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Open Sans', sans-serif;
+  }
 `
 
 export default Global;

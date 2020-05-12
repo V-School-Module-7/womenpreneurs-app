@@ -1,10 +1,7 @@
 import React from 'react';
-import firebaseConfig from '../Firebase';
-import firebase from "firebase";
+import fire from '../Firebase';
 require('dotenv').config();
 
-
-let fire = firebase.initializeApp(firebaseConfig);
 
 const UserContext = React.createContext();
 
@@ -69,14 +66,14 @@ class UserProvider extends React.Component {
     })
   }
 
-  showToken = () => {
-    fire.auth().currentUser.getIdToken().then((token) => {
-      console.log('you are...', token)
-    });
-  }
+  // showToken = () => {
+  //   fire.auth().currentUser.getIdToken().then((token) => {
+  //     console.log('you are...', token)
+  //   });
+  // }
   
   authListener = () => {
-    firebase.auth().onAuthStateChanged(user => {
+    fire.auth().onAuthStateChanged(user => {
       if (user) {
         this.setState({
           user: user,
@@ -107,6 +104,7 @@ class UserProvider extends React.Component {
           login: this.login,
           logout: this.logout,
           showToken: this.showToken,
+          //pass firebase 
           ...this.state,
         }}
       > 

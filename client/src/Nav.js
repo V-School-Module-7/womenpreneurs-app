@@ -1,30 +1,35 @@
 import React from 'react';
 import {withUser} from './context/UserProvider';
 import { Link, withRouter } from 'react-router-dom';
-import fire from "./Firebase";
+import VerticalLogo from "./components/Logos/Vertical";
+import NavContainer from "./components/Containers/NavContainer";
 
 
-class Nav extends React.Component {
 
-  handleLogout = () => {
-    this.props.logout();
-    this.props.history.push('/home');
+const Nav = (props) => {
+
+  const handleLogout = () => {
+    props.logout();
+    props.history.push('/home');
   }
 
-  handleShowUser = () => {
-    this.props.showToken()
-  }
+  // handleShowUser = () => {
+  //   this.props.showToken()
+  // }
 
-  render() {
     return (
-      <div style={{width: '100%', height: '100px', display: 'flex', alignItems: 'center'}}>
-        <Link to='/home'>Home</Link>
-        {this.props.uid ? <button style={{marginLeft: '40px'}} onClick={this.handleLogout}>Logout</button> : <Link to='/auth' style={{marginLeft: '40px'}}>Login/SignUp</Link> }
-      <button onClick={this.handleShowUser}>Log User Token</button>
-      <div>{this.props.uid ? <Link to='/paymentform' style={{marginLeft: '40px'}}>Payment Form</Link> : ""}</div> 
-      </div>
+      <NavContainer>
+        <Link to='/home'>
+          <VerticalLogo />
+        </Link>
+        {props.uid ? <button style={{marginRight: '10px'}} onClick={handleLogout}>Logout</button> : <Link to='/auth' style={{marginRight: '10px'}}>Login/SignUp</Link> }
+      {/* <button onClick={this.handleShowUser}>Log User Token</button> */}
+      {/* <div>{this.props.uid ? 
+        <Link to='/paymentform' style={{marginLeft: '40px'}}>Payment Form</Link> 
+        : ""}
+      </div>  */}
+      </NavContainer>
     )
-  }
 }
 
 export default withRouter(withUser(Nav));
