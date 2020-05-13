@@ -8,7 +8,6 @@ import { withUser } from "./context/UserProvider";
 // const firebaseAppAuth = firebaseApp.Auth();
 
 
-
 class Auth extends React.Component {
   constructor() {
     super();
@@ -95,7 +94,7 @@ class Auth extends React.Component {
           >
             Signup
           </button>
-        </form> */}
+        </form> 
         {this.state.authErrorMsg && this.state.authErrorMsg} 
       
         <StyledFirebaseAuth

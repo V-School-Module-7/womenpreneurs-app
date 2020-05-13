@@ -1,8 +1,6 @@
 import React from 'react';
-import axios from 'axios';
 import fire from '../Firebase';
 import firebase from "firebase";
-
 
 const UserContext = React.createContext();
 
@@ -39,12 +37,11 @@ class UserProvider extends React.Component {
   }
 
   signup = (user) => {
-    console.log('context signup', user)
+    console.log('context signup', user);
     fire
       .auth()
       .createUserWithEmailAndPassword(user.email, user.password)
       .then(createdUser => {
-        console.log('in .then() create user context', createdUser);
         this.authListener();
       })
       .catch(error => {
@@ -91,6 +88,7 @@ class UserProvider extends React.Component {
       }
     });
   };
+
 
 
   render() {    
