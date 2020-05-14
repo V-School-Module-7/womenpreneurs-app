@@ -1,10 +1,5 @@
 import React from "react";
-import Form from "./components/Forms/Form";
-import FormInput from "./components/Forms/FormInput";
-import FormButton from "./components/Forms/FormButton";
 import CenteredContainer from "./components/Containers/CenteredPageContainer";
-import FormTitle from "./components/Forms/FormTitle";
-import Horizontal from "./components/Logos/Horizontal";
 import SignUpForm from './SignUpForm';
 import { withRouter } from 'react-router-dom';
 import { withUser } from "./context/UserProvider";
@@ -42,14 +37,18 @@ import SignInForm from "./SignInForm";
 
 
 class Auth extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       email: "",
       password: "",
-      loggingIn: true,
+      loggingIn: this.props.loggingIn || true,
       authErrMsg: "",
-      step: 0
+      step: this.props.step || 0,
+      firstName: '', 
+      lastName: '',
+      title: '',
+      companyName: ''
     };
 
   }
@@ -58,9 +57,10 @@ class Auth extends React.Component {
 
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
+    console.log(e.target.value)
   };
 
-  handleEmailPasswordLogin = async (e) => {
+  handleEmailPasswordLogin = (e) => {
     e.preventDefault();
     // this.props.handleErrorMessage();
     let userObj = {
@@ -118,8 +118,6 @@ class Auth extends React.Component {
 
 
   render() {
-   
-    console.log(typeof this.state.step)
 
     return (
       <CenteredContainer>
@@ -135,12 +133,11 @@ class Auth extends React.Component {
             nextStep={this.nextStep} 
             previousStep={this.previousStep} 
             handleEmailPasswordSignup={this.handleEmailPasswordSignup}  
-            email={this.state.email}
-            password={this.state.password}
             step={this.state.step}
             loggingIn={this.state.loggingIn}
             handleLoginOrSignup={this.handleLoginOrSignup}
-          {...this.state}
+            email={this.state.email}
+            password={this.state.password}
           />
         </>
       }

@@ -4,8 +4,8 @@ import SignUpTwo from './SignUpTwo';
 import SignUpThree from './SignUpThree';
 import SignUpFour from './SignUpFour';
 
-class SignUpForm extends React.Component {
-
+const SignUpForm = (props) => {
+  
   // formSteps = () => {
   //   if (this.props.step === 0) {
   //     return <SignUpOne 
@@ -22,34 +22,37 @@ class SignUpForm extends React.Component {
   //   }
   // }
 
-  render() {
-    if (this.props.step === 0) {
+    if (props.step === 0) {
       return <SignUpOne 
-              handleLoginOrSignup={this.props.handleLoginOrSignup}
-              nextStep={this.props.nextStep}
-              handleChange={this.props.handleChange}
+              handleLoginOrSignup={props.handleLoginOrSignup}
+              nextStep={props.nextStep}
+              handleChange={props.handleChange}
+              email={props.email}
+              password={props.password}
+              {...props}
              />
-    } else if (this.props.step === 1) {
+    } else if (props.step === 1) {
       return <SignUpTwo 
-              nextStep={this.props.nextStep}
-              previousStep={this.props.previousStep}
-              handleChange={this.props.handleChange}
+              nextStep={props.nextStep}
+              previousStep={props.previousStep}
+              handleChange={props.handleChange}
+              {...props}
              />
-    } else if (this.props.step === 2) {
+    } else if (props.step === 2) {
       return <SignUpThree 
-              nextStep={this.props.nextStep}
-              previousStep={this.props.previousStep}
-              handleChange={this.props.handleChange}
+              nextStep={props.nextStep}
+              previousStep={props.previousStep}
+              handleChange={props.handleChange}
+              {...props}
              />
-    } else if (this.props.step === 3) {
+    } else if (props.step === 3) {
       return <SignUpFour
-               handleSubmit={this.props.handleSubmit}
-               previousStep={this.props.previousStep}
-               handleChange={this.props.handleChange}
-               {...this.props}
+               handleSubmit={props.handleSubmit}
+               previousStep={props.previousStep}
+               handleChange={props.handleChange}
+               {...props}
              />
     }
-  }
 }
 
 

@@ -13,7 +13,7 @@ const LinkedInButton = styled.button`
   align-self: center;
   cursor: pointer;
   margin-bottom: 24px;
-  :hover {
+  &:hover {
     box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.10);
   }
   display: flex;

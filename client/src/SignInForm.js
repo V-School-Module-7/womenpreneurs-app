@@ -8,6 +8,8 @@ import LinkedInButton from "./components/Buttons/LinkedInButton";
 import LinkedInButtonLogo from "./components/Logos/LinkedInButtonLogo";
 
 const SignInForm = (props) => {
+ 
+ 
   const callLinkedIn = () => {
     window.open(
       `http://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=86pzo1h1r9o6iu&redirect_uri=http://localhost:3000/home&state=vrstr238957xvbthg&scope=r_liteprofile,r_emailaddress`,

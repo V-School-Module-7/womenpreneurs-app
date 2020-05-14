@@ -18,7 +18,9 @@ require('dotenv').config();
 
 
 const SignUpTwo = (props) => {
-  const [userInfo, setUserInfo] = useState([]);
+  
+  
+  const [userInfo, setUserInfo] = useState('');
   const [linkedCode, setCode] = useState('');
 
 
@@ -37,9 +39,34 @@ const SignUpTwo = (props) => {
 
   useEffect(() => {
     if (linkedCode) {
-      console.log('can now get token with', linkedCode)
+      getData()
+      .then((userObj) => {
+        setUserInfo(userObj)
+      })
+      .catch(err => {
+        console.log(err)
+      })
     }
+    console.log('user info', userInfo);
   })
+
+  const getData = async function() {
+    let getLinkedinUser = fire.functions().httpsCallable('linkedinUser')
+    let result = await getLinkedinUser({linkedinUser: linkedCode});
+    if (result) {
+      console.log(result)
+      let userObj = {
+        firstName: result.data.firstName.localized.en_US,
+        lastName: result.data.lastName.localized.en_US,
+        userId: result.data.id,
+        largeProfileImgUrl: result.data.profilePicture["displayImage~"].elements[2].identifiers[0].identifier,
+        smallProfileImgUrl: result.data.profilePicture["displayImage~"].elements[0].identifiers[0].identifier,
+        title: '',
+        companyName: ''
+      }
+      return userObj;
+    }
+  }
 
   // NOTE: REFACTOR TO USE STYLED COMPONENTS!!!
   // handlechange of input to set state for name of input
@@ -57,45 +84,64 @@ const SignUpTwo = (props) => {
   };
 
   const callLinkedIn = () => {
-   window.open(`http://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=86pzo1h1r9o6iu&redirect_uri=http://localhost:3000/acctsetup&state=vrstr238957xvbthg&scope=r_liteprofile`, '_top')
+   window.open(`http://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=86pzo1h1r9o6iu&redirect_uri=http://localhost:3000/acctsetup&state=vrstr238957xvbthg&scope=r_liteprofile%20r_emailaddress`, '_top')
   }
 
   //need to get &state off of the linkedin code before submitting function
   // check linkedCode in devtools.
 
-  const getData = async function() {
-    let getLinkedinUser = fire.functions().httpsCallable('linkedinUser')
-    let result = await getLinkedinUser({linkedinUser: linkedCode});
-    if (result) {
-      console.log('function result', result)
-    }
-  }
 
   
-
+  console.log('props', props)
   
     return (
       <CenteredContainer>
         <PageTitle>Account Details</PageTitle>
         <LinkedInButton type='button' onClick={callLinkedIn}>Authorize LinkedIn<LinkedInButtonLogo/></LinkedInButton>
-         <button onClick={getData}>Pull My LinkedIn Account</button>
-          <p style={{textAlign: 'center', width: '350px', marginBottom: '30px'}}>
-            If needed, adjust your account details to how you want to be represented on Womanpreneurs.
+         {/* {linkedCode && <button onClick={getData}>Pull My LinkedIn Account</button>} */}
+          {userInfo.smallProfileImgUrl &&  <div>
+            <h2>Your LinkedIn Account Info</h2>
+            <div style={{display: 'flex', width: '350px'}}>
+            <img style={{borderRadius: '50%'}} src={userInfo.smallProfileImgUrl} alt="linkedin profile image"/>
+            <span style={{display: 'flex', marginLeft: '75px'}}>
+              <h3>{userInfo.firstName}</h3>
+              <h3>{userInfo.lastName}</h3>
+            </span>
+            <span>
+              <h4>{props.title}</h4>
+              <h4>{props.companyName}</h4>
+            </span>
+            </div>
+            <p style={{textAlign: 'center', width: '350px'}}>
+            If needed, adjust your account details to how you want to be represented on Womanpreneurs. We have also 
+            pulled your LinkedIn account id in order to offer features such as making LinkedIn connections from Womanpreneurs.
           </p>
-        {/* <LinkedInButton onClick={callLinkedIn}>Connect to LinkedIn</LinkedInButton> */}
-        {/* <div style={{display: 'flex', alignItems: 'center', marginTop: '16px'}}>
-          <p onClick={setFormVisibility}>I do not want to connect to LinkedIn</p>
-        </div> */}
-
+          </div>}
         <Form>
-          <>
-            <FormInput name='firstName' onChange={props.handleChange} placeholder="first name" />
-            <FormInput name='lastName' onChange={props.handleChange} placeholder="last name" />
-            <FormInput name='title' onChange={props.handleChange} placeholder="title" />
-            <FormInput name='companyName' onChange={props.handleChange} placeholder="company name" />
-          </>
-          
-           {/* <FormInput name='linkedinUrl' onChange={props.handleChange} placeholder="linkedin.com/in/myname" /> */}
+            <FormInput 
+              onChange={(e)=>props.handleChange(e)}
+              value={props.value || userInfo.firstName}
+              name="firstName"
+              placeholder="first name"
+              />
+            <FormInput 
+              onChange={(e)=>props.handleChange(e)}
+              value={props.value || userInfo.lastName}
+              name="lastName"
+              placeholder="last name"
+              />
+            <FormInput 
+              onChange={(e)=>props.handleChange(e)}
+              value={props.value}
+              name="companyName"
+              placeholder="company name"
+              />
+            <FormInput 
+              onChange={(e)=>props.handleChange(e)}
+              value={props.value}
+              name="title"
+              placeholder="title ex. Founder, Engineer"
+              />
           <span style={{display: 'flex', justifyContent: 'space-around', width: '297px'}}>
             <DecrementButton primary onClick={props.previousStep}>
               ◀ Back
