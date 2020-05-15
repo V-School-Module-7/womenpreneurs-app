@@ -22,7 +22,6 @@ class App extends React.Component {
           <Route exact path="/" component={Landing} />
           <Route path="/home" component={Home} />
           <Route path="/auth" component={Auth} />
-          <Route path="/acctsetup" component={SignUpTwo} />
           <Route path="/linkedin" component={LinkedIn} />
           <Route path="/paymentform" component={PaymentForm} />
         </Switch>

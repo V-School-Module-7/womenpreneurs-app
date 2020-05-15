@@ -49,7 +49,7 @@ class Auth extends React.Component {
       password: "",
       loggingIn: true,
       authErrMsg: "",
-      step: 0
+      // step: 0
     };
 
   }
@@ -105,16 +105,16 @@ class Auth extends React.Component {
     })
   }
 
-  nextStep = e => {
-   e.preventDefault();
-   this.setState({ step: this.state.step + 1 })
+  // nextStep = e => {
+  //  e.preventDefault();
+  //  this.setState({ step: this.state.step + 1 })
 
-  }
+  // }
 
-  previousStep = e => {
-    e.preventDefault();
-    this.setState({ step: this.state.step - 1 })
-  }
+  // previousStep = e => {
+  //   e.preventDefault();
+  //   this.setState({ step: this.state.step - 1 })
+  // }
 
 
   render() {
@@ -140,7 +140,7 @@ class Auth extends React.Component {
             step={this.state.step}
             loggingIn={this.state.loggingIn}
             handleLoginOrSignup={this.handleLoginOrSignup}
-          {...this.state}
+            {...this.state}
           />
         </>
       }

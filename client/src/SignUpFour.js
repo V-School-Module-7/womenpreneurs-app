@@ -1,4 +1,6 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
+import { withUser } from "./context/UserProvider";
 import Form from "./components/Forms/Form";
 import FormInput from "./components/Forms/FormInput";
 import FormTextArea from "./components/Forms/FormTextArea";
@@ -56,4 +58,4 @@ class SignUpFour extends React.Component {
 
 }
 
-export default SignUpFour;
+export default withRouter(withUser(SignUpFour));

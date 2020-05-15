@@ -49,7 +49,7 @@ class UserProvider extends React.Component {
       .then(createdUser => {
         console.log('in .then() create user context', createdUser);
         this.authListener();
-        window.location.href = window.location.origin + '/linkedin';
+        
       })
       .catch(error => {
         console.log(error);

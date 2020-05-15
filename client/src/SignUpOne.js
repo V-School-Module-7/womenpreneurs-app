@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { withRouter, useRouteMatch } from 'react-router-dom';
+import { withUser } from "./context/UserProvider";
 import Form from "./components/Forms/Form";
 import FormInput from "./components/Forms/FormInput";
 import FormButton from "./components/Forms/FormButton";
@@ -8,6 +10,29 @@ import FormTitle from "./components/Forms/FormTitle";
 
 const SignUpOne = (props) => {
 
+
+
+
+  let { path, url } = useRouteMatch();
+
+  useEffect(() => {
+    if (props.uid) {
+      props.history.push(`${path}/linkedin`)
+    }
+  })
+  
+  
+  
+  const handleSignUp = (e) => {
+    e.preventDefault();
+    let user = {
+      email: props.email,
+      password: props.password
+    }
+    props.signup(user)
+  }
+
+  
     return (
       <>
       <Horizontal />
@@ -34,7 +59,7 @@ const SignUpOne = (props) => {
             name="password"
             placeholder="Password"
           />
-          <FormButton primary onClick={props.nextStep}>
+          <FormButton primary onClick={handleSignUp}>
             Sign Up
           </FormButton>
         </Form>
@@ -42,4 +67,4 @@ const SignUpOne = (props) => {
     );
 }
 
-export default SignUpOne;
+export default withRouter(withUser(SignUpOne));
