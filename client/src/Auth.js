@@ -2,7 +2,7 @@ import React from "react";
 import CenteredContainer from "./components/Containers/CenteredPageContainer";
 import SignUpForm from './SignUpForm';
 import { withRouter } from 'react-router-dom';
-import { withUser } from "./context/UserProvider";
+import { withUser } from './context/UserProvider';
 import SignInForm from "./SignInForm";
 
 
@@ -42,18 +42,28 @@ class Auth extends React.Component {
     this.state = {
       email: "",
       password: "",
-      loggingIn: this.props.loggingIn || true,
+      loggingIn: true,
       authErrMsg: "",
-      step: this.props.step || 0,
       firstName: '', 
       lastName: '',
       title: '',
-      companyName: ''
+      companyName: '',
+      step: 0,
     };
 
   }
 
+  nextStep = () => {
+    this.setState(prev => {
+     return {step: prev.step + 1}
+   });
+ }
 
+ previousStep = () => {
+  this.setState(prev => {
+   return {step: prev.step - 1}
+   });
+ }
 
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
@@ -68,21 +78,10 @@ class Auth extends React.Component {
       password: this.state.password
     }
     this.props.login(userObj);
-    // localStorage.getItem()
-    // .then((user) => {
-    //   if (user) {
-    //     return this.props.history.push('/home');
-    //   } else {
-    //     alert('hello there')
-    //   }
-    // })
-
-    // this.props.history.push('/home')
-    
   };
 
-  handleEmailPasswordSignup = (e) => {
-    e.preventDefault();
+  handleEmailPasswordSignup = () => {
+    
     // this.props.handleErrorMessage();
     let userObj = {
       email: this.state.email,
@@ -90,13 +89,6 @@ class Auth extends React.Component {
     }
 
     this.props.signup(userObj)
-      //.then(user => {
-      //firestorage.addthing(userobj , {
-        //stuff from the form to add to user obj in db 
-      //})
-      //})
-    
-    // this.props.history.push('/linkedIn'); 
   };
 
   handleLoginOrSignup = () => {
@@ -105,45 +97,35 @@ class Auth extends React.Component {
     })
   }
 
-  nextStep = e => {
-   e.preventDefault();
-   this.setState({ step: this.state.step + 1 })
-
-  }
-
-  previousStep = e => {
-    e.preventDefault();
-    this.setState({ step: this.state.step - 1 })
-  }
-
 
   render() {
-
+    console.log('auth props', this.props)
     return (
-      <CenteredContainer>
-      {this.state.loggingIn ?
-        <SignInForm 
-          handleLoginOrSignup={this.handleLoginOrSignup}
-        />
-        :
-        <>
-          <SignUpForm 
-            handleChange={this.handleChange}
-            handleEmailPasswordSignup={this.handleEmailPasswordSignup}
-            nextStep={this.nextStep} 
-            previousStep={this.previousStep} 
-            handleEmailPasswordSignup={this.handleEmailPasswordSignup}  
-            step={this.state.step}
-            loggingIn={this.state.loggingIn}
+        <CenteredContainer>
+        {this.state.loggingIn ?
+          <SignInForm 
             handleLoginOrSignup={this.handleLoginOrSignup}
-            email={this.state.email}
-            password={this.state.password}
           />
-        </>
-      }
+          :
+          <>
+            <SignUpForm 
 
-        {this.state.authErrMsg && this.state.authErrMsg}
-      </CenteredContainer>
+              nextStep={this.nextStep}
+              previousStep={this.previousStep}
+              step={this.state.step}
+              handleChange={this.handleChange}
+              handleEmailPasswordLogin={this.handleEmailPasswordLogin}
+              handleEmailPasswordSignup={this.handleEmailPasswordSignup}  
+              loggingIn={this.state.loggingIn}
+              handleLoginOrSignup={this.handleLoginOrSignup}
+              email={this.state.email}
+              password={this.state.password}
+            />
+          </>
+        }
+
+          {/* {this.state.authErrMsg && this.state.authErrMsg} */}
+        </CenteredContainer>
     );
   }
 }

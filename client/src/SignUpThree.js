@@ -8,7 +8,7 @@ import FormTitle from "./components/Forms/FormTitle";
 import CenteredContainer from "./components/Containers/CenteredPageContainer";
 import FormLabel from "./components/Forms/FormLabel";
 
-class SignUpTwo extends React.Component {
+class SignUpThree extends React.Component {
   render() {
     return (
       <CenteredContainer>
@@ -47,4 +47,4 @@ class SignUpTwo extends React.Component {
   }
 }
 
-export default SignUpTwo;
+export default SignUpThree;

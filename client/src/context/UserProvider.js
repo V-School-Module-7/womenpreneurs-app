@@ -15,15 +15,8 @@ class UserProvider extends React.Component {
       //keep in state in production? 
       user: localStorage.getItem("user") || {},
       uid: localStorage.getItem("uid") || "",
-      // authErrMsg: ''
     }
   }
-
-  // handleErrorMessage = () => {
-  //   this.setState({
-  //     authErrMsg: ''
-  //   })
-  // }
 
   login = (user) => {
     console.log('in context', user)
@@ -41,11 +34,11 @@ class UserProvider extends React.Component {
       });
   }
 
-  signup = (user) => {
-    console.log('context signup', user)
+  signup = (userObj) => {
+    console.log('context signup', userObj)
     fire
       .auth()
-      .createUserWithEmailAndPassword(user.email, user.password)
+      .createUserWithEmailAndPassword(userObj.email, userObj.password)
       .then(createdUser => {
         console.log('in .then() create user context', createdUser);
         this.authListener();
@@ -103,7 +96,7 @@ class UserProvider extends React.Component {
           signup: this.signup,
           login: this.login,
           logout: this.logout,
-          showToken: this.showToken,
+          hello: 'world',
           //pass firebase 
           ...this.state,
         }}

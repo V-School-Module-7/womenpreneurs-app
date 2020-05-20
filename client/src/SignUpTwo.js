@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {withRouter} from 'react-router-dom';
+import {withRouter, Redirect} from 'react-router-dom';
 import {withUser} from './context/UserProvider';
 import fire from './Firebase';
 import Form from "./components/Forms/Form";
@@ -41,13 +41,22 @@ const SignUpTwo = (props) => {
     if (linkedCode) {
       getData()
       .then((userObj) => {
+        console.log('have user obj')
         setUserInfo(userObj)
+        if (userInfo) {
+          console.log('we have the user')
+          localStorage.setItem("userInfo", JSON.stringify(userInfo))
+            // return <Redirect
+            //   to={{
+            //     pathname: "/acctsetup",
+            //     state: { userInfo: localStorage.getItem("userInfo") }
+            //   }}/>
+        }
       })
       .catch(err => {
         console.log(err)
       })
     }
-    console.log('user info', userInfo);
   })
 
   const getData = async function() {
@@ -66,6 +75,7 @@ const SignUpTwo = (props) => {
       }
       return userObj;
     }
+    return
   }
 
   // NOTE: REFACTOR TO USE STYLED COMPONENTS!!!
@@ -84,7 +94,7 @@ const SignUpTwo = (props) => {
   };
 
   const callLinkedIn = () => {
-   window.open(`http://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=86pzo1h1r9o6iu&redirect_uri=http://localhost:3000/acctsetup&state=vrstr238957xvbthg&scope=r_liteprofile%20r_emailaddress`, '_top')
+   window.open(`http://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=86pzo1h1r9o6iu&redirect_uri=http://localhost:3000/signup&state=vrstr238957xvbthg&scope=r_liteprofile%20r_emailaddress`, '_top')
   }
 
   //need to get &state off of the linkedin code before submitting function
@@ -155,4 +165,4 @@ const SignUpTwo = (props) => {
     );
 }
 
-export default withUser(withRouter(SignUpTwo));
+export default withRouter(withUser(SignUpTwo));

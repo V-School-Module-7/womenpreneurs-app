@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {withUser} from './context/UserProvider';
 import Form from "./components/Forms/Form";
 import FormInput from "./components/Forms/FormInput";
 import FormButton from "./components/Forms/FormButton";
@@ -13,29 +14,31 @@ const SignUpOne = (props) => {
 
   const createUser = event => {
     event.preventDefault()
-    // fire.auth().createUserWithEmailAndPassword(props.email, props.password)
-    // .then(() => {
-    //   props.nextStep();
-    // })
-    // .catch(error => {
-    //   console.log('error code', error.code)
-    //   switch (error.code) {
-    //       case 'auth/email-already-in-use':
-    //         setErrMessage(`Email address ${props.email} already in use.`);
-    //         break;
-    //       case 'auth/invalid-email':
-    //         setErrMessage(`Email address ${props.email} is invalid.`);
-    //         break;
-    //       case 'auth/operation-not-allowed':
-    //         setErrMessage(`Auth operation not allowed.`);
-    //         break;
-    //       default:
-    //         setErrMessage('Error during signup');
-    //     }
-    // });
-    // props.nextStep(e)
+    props.handleEmailPasswordSignup();
+    fire.auth().createUserWithEmailAndPassword(props.email, props.password)
+    .then(() => {
+      props.nextStep();
+    })
+    .catch(error => {
+      console.log('error code', error.code)
+      switch (error.code) {
+          case 'auth/email-already-in-use':
+            setErrMessage(`Email address ${props.email} already in use.`);
+            break;
+          case 'auth/invalid-email':
+            setErrMessage(`Email address ${props.email} is invalid.`);
+            break;
+          case 'auth/operation-not-allowed':
+            setErrMessage(`Auth operation not allowed.`);
+            break;
+          default:
+            setErrMessage('Error during signup');
+        }
+    });
   }
 
+
+  console.log('props', props)
     return (
       <>
       <Horizontal />
@@ -65,6 +68,7 @@ const SignUpOne = (props) => {
             placeholder="Password"
           />
           <h3>{errMessage}</h3>
+          {/* <FormButton primary onClick={createUser}> */}
           <FormButton primary onClick={props.nextStep}>
             Sign Up
           </FormButton>
@@ -73,4 +77,4 @@ const SignUpOne = (props) => {
     );
 }
 
-export default SignUpOne;
+export default withUser(SignUpOne);

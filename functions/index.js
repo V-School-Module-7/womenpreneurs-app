@@ -37,6 +37,7 @@ exports.linkedinUser = functions.https.onCall((data, context) => {
     console.log('hello logging');
     //data.linkedinUser is the "code"
     console.log('data.linkedinUser', data.linkedinUser);
+    // request access token from linkedin
     return axios.get("https://www.linkedin.com/oauth/v2/accessToken", { 
         params: {
             grant_type: "authorization_code",
@@ -52,7 +53,6 @@ exports.linkedinUser = functions.https.onCall((data, context) => {
             return response
         })
         .then((response) => {
-            console.log('response in next then', response)
             // make second request to linkedin for the user info
             // respones.access_token
             return axios.get('https://api.linkedin.com/v2/me?projection=(id,firstName,lastName,email-address,public-profile-url,profilePicture(displayImage~:playableStreams))', {
