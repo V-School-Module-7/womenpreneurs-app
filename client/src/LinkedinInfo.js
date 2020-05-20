@@ -1,25 +1,16 @@
 import React, {useState, useEffect} from "react";
 import {withRouter, Redirect} from 'react-router-dom';
 import {withUser} from './context/UserProvider';
+import AcctDetailsOne from './AcctDetailsOne';
+import AcctDetailsTwo from './AcctDetailsTwo';
+import AcctDetailsThree from './AcctDetailsThree';
 import fire from './Firebase';
-import Form from "./components/Forms/Form";
-import FormInput from "./components/Forms/FormInput";
-import FormButton from "./components/Forms/FormButton";
-import LinkedInButton from "./components/Buttons/LinkedInButton";
-import LinkedInButtonLogo from "./components/Logos/LinkedInButtonLogo";
-// import FormTitle from "./components/Forms/FormTitle";
-import CenteredContainer from "./components/Containers/CenteredPageContainer";
-import PageTitle from "./components/Titles/PageTitle";
-import IncrementButton from "./components/Forms/IncrementButton";
-import DecrementButton from "./components/Forms/DecrementButton";
-import FormLabel from "./components/Forms/FormLabel";
-const axios = require('axios');
 require('dotenv').config();
 
 
-const SignUpTwo = (props) => {
+const LinkedinInfo = (props) => {
   
-  
+  const [acctDetailsStep, setAcctDetailsStep] = useState(0);
   const [userInfo, setUserInfo] = useState('');
   const [linkedCode, setCode] = useState('');
 
@@ -59,6 +50,14 @@ const SignUpTwo = (props) => {
     }
   })
 
+  const nextAcctDetailsStep = () => {
+    setAcctDetailsStep(acctDetailsStep + 1);
+  }
+
+  const previousAcctDetailsStep = () => {
+    setAcctDetailsStep(acctDetailsStep - 1);
+  }
+
   const getData = async function() {
     let getLinkedinUser = fire.functions().httpsCallable('linkedinUser')
     let result = await getLinkedinUser({linkedinUser: linkedCode});
@@ -87,45 +86,29 @@ const SignUpTwo = (props) => {
   // will users want different profile pictures vs their linkedin photos?
   // ex. list dayjob employer on linkedin, but list your startup on womanpreneurs
 
-  // note: Add social media links to form
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert("submitted");
-  };
 
-  const callLinkedIn = () => {
-   window.open(`http://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=86pzo1h1r9o6iu&redirect_uri=http://localhost:3000/acctsetup&state=vrstr238957xvbthg&scope=r_liteprofile%20r_emailaddress`, '_top')
-  }
 
-  //need to get &state off of the linkedin code before submitting function
-  // check linkedCode in devtools.
+
 
 
   
   console.log('props', props)
-  
-    return (
-      <CenteredContainer>
-        <PageTitle>Account Details</PageTitle>
-        <p>We use linkedin to help complete your profile and give you access to features
-          such as making connections through Ascenda/Womanpreneurs.  If you do not authorize 
-          Linkedin you will NOT have access to these features.
-        </p>
-        <LinkedInButton type='button' onClick={callLinkedIn}>Authorize LinkedIn<LinkedInButtonLogo/></LinkedInButton>
-        {/* TODO: Auth flow for non-linkedin users */}
-        <h2 onClick={props.nextStep}>I understand and wish to proceed without LinkedIn</h2>
-        <Form>
-          <span style={{display: 'flex', justifyContent: 'space-around', width: '297px'}}>
-            <DecrementButton primary onClick={props.previousStep}>
-              ◀ Back
-            </DecrementButton>
-            {/* <IncrementButton primary onClick={props.nextStep}>
-              Next ▶
-            </IncrementButton> */}
-          </span>
-        </Form>
-      </CenteredContainer>
-    );
+
+  if (acctDetailsStep === 0) {
+    return <AcctDetailsOne
+              userInfo={userInfo}
+              nextAcctDetailsStep={nextAcctDetailsStep}
+           />
+  } else if (acctDetailsStep === 1) {
+    return <AcctDetailsTwo
+              nextAcctDetailsStep={nextAcctDetailsStep}
+              previousAcctDetailsStep={previousAcctDetailsStep}
+           />
+  } else if (acctDetailsStep === 2) {
+    return <AcctDetailsThree 
+            
+           />
+  } 
 }
 
-export default withRouter(withUser(SignUpTwo));
+export default withRouter(withUser(LinkedinInfo));

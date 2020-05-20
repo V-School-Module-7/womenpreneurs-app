@@ -48,22 +48,9 @@ class Auth extends React.Component {
       lastName: '',
       title: '',
       companyName: '',
-      step: 0,
     };
 
   }
-
-  nextStep = () => {
-    this.setState(prev => {
-     return {step: prev.step + 1}
-   });
- }
-
- previousStep = () => {
-  this.setState(prev => {
-   return {step: prev.step - 1}
-   });
- }
 
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
@@ -109,10 +96,6 @@ class Auth extends React.Component {
           :
           <>
             <SignUpForm 
-
-              nextStep={this.nextStep}
-              previousStep={this.previousStep}
-              step={this.state.step}
               handleChange={this.handleChange}
               handleEmailPasswordLogin={this.handleEmailPasswordLogin}
               handleEmailPasswordSignup={this.handleEmailPasswordSignup}  

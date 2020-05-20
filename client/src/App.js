@@ -9,6 +9,7 @@ import { Switch, Route } from "react-router-dom";
 import Nav from "./Nav";
 import SignUpTwo from "./SignUpTwo";
 import SignUpForm from "./SignUpForm"
+import LinkedinInfo from './LinkedinInfo';
 // import SignUpForm from "./SignUpForm";
 
 class App extends React.Component {
@@ -24,10 +25,7 @@ class App extends React.Component {
           <Route exact path="/" component={Landing} />
           <Route path="/home" component={Home} />
           <Route exact path="/auth" component={Auth} />
-          <Route path="/acctsetup" component={SignUpTwo} />
-          <Route path="/signup" render={(props) => (
-            <Auth loggingIn={false} step={1} />
-          )} />
+          <Route path="/acctsetup" component={LinkedinInfo} />
           {/* <Route path="/acctsetup" component={SignUpTwo} /> */}
           <Route path="/paymentform" component={PaymentForm} />
         </Switch>

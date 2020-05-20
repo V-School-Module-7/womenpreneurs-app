@@ -32,6 +32,12 @@ const logging = require('@google-cloud/logging');
 // });
 
 
+exports.linkedinCode = functions.https.onCall((data, context) => {
+    console.log('hello from function')
+    console.log('data', data)
+})
+
+
 exports.linkedinUser = functions.https.onCall((data, context) => {
     
     console.log('hello logging');
