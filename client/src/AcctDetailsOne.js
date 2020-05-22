@@ -18,21 +18,27 @@ require('dotenv').config();
 
 
 const AcctDetailsOne = (props) => {
+
+  console.log('formdata', props.formData);
+  console.log('userInfo', props.userInfo);
+
   return (
     <CenteredContainer>
       <PageTitle>Account Details</PageTitle>
       {props.userInfo.smallProfileImgUrl ?  <div>
-          <h2>Your LinkedIn Account Info</h2>
-          <div style={{display: 'flex', width: '350px'}}>
-          <img style={{borderRadius: '50%'}} src={props.userInfo.smallProfileImgUrl} alt="linkedin profile image"/>
-          <span style={{display: 'flex', marginLeft: '75px'}}>
-            <h3>{props.userInfo.firstName}</h3>
-            <h3>{props.userInfo.lastName}</h3>
+          <h2>Basic Account Info</h2>
+          <div style={{display: 'flex', width: '400px', justifyContent: 'space-around'}}>
+          <img style={{borderRadius: '50%', height: '100px', width: '100px', alignSelf: 'centered'}} src={props.userInfo.smallProfileImgUrl} alt="linkedin profile image"/>
+          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+          <span style={{display: 'flex', justifyContent: 'flex-end'}}>
+            <h3>{props.formData.firstName}</h3>
+            <h3>{props.formData.lastName}</h3>
           </span>
-          <span>
-            <h4>{props.title}</h4>
-            <h4>{props.companyName}</h4>
+          <span style={{textAlign: 'center'}}>
+            <h4>{props.formData.companyName}</h4>
+            <h4>{props.formData.title}</h4>
           </span>
+          </div>
           </div>
           <p style={{textAlign: 'center', width: '350px'}}>
           If needed, adjust your account details to how you want to be represented on Womanpreneurs. We have also 
@@ -41,26 +47,26 @@ const AcctDetailsOne = (props) => {
         </div>: <h4>Loading LinkedIn Data...</h4>}
       <Form>
           <FormInput 
-            onChange={(e)=>props.handleChange(e)}
-            value={props.value || props.userInfo.firstName}
+            onChange={e => props.updateFormData(e)}
+            value={props.formData.firstName}
             name="firstName"
             placeholder="first name"
             />
           <FormInput 
-            onChange={(e)=>props.handleChange(e)}
-            value={props.value || props.userInfo.lastName}
+            onChange={e => props.updateFormData(e)}
+            value={props.formData.lastName}
             name="lastName"
             placeholder="last name"
             />
           <FormInput 
-            onChange={(e)=>props.handleChange(e)}
-            value={props.value}
+            onChange={e => props.updateFormData(e)}
+            value={props.formData.companyName}
             name="companyName"
             placeholder="company name"
             />
           <FormInput 
-            onChange={(e)=>props.handleChange(e)}
-            value={props.value}
+            onChange={e => props.updateFormData(e)}
+            value={props.formData.title}
             name="title"
             placeholder="title ex. Founder, Engineer"
             />

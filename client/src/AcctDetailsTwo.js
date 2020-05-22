@@ -8,8 +8,7 @@ import FormTitle from "./components/Forms/FormTitle";
 import CenteredContainer from "./components/Containers/CenteredPageContainer";
 import FormLabel from "./components/Forms/FormLabel";
 
-class AcctDetailsTwo extends React.Component {
-  render() {
+const AcctDetailsTwo = (props) => {
     return (
       <CenteredContainer>
         <FormTitle>Questionnaire</FormTitle>
@@ -23,28 +22,27 @@ class AcctDetailsTwo extends React.Component {
             <button type='radio'></button>
           </div> */}
           <FormLabel>What are you currently working on?</FormLabel>
-          <FormTextArea onChange={this.props.handleChange} name='current'/>
+          <FormTextArea onChange={e => props.updateFormData(e)} value={props.formData.current} name='current'/>
           <FormLabel>What are some things you need help with right now?</FormLabel>
-          <FormTextArea onChange={this.props.handleChange} name='helpWith'/>
+          <FormTextArea onChange={e => props.updateFormData(e)} value={props.formData.helpWith} name='helpWith'/>
           <FormLabel>
             How might you positively impact the Ascenda community?
             What do you enjoy helping with the most?
           </FormLabel>
-          <FormTextArea onChange={this.props.handleChange} name='impactGoal'/>
+          <FormTextArea onChange={e => props.updateFormData(e)} value={props.formData.impactGoal} name='impactGoal'/>
           <FormLabel>What are you most proud of?</FormLabel>
-          <FormTextArea onChange={this.props.handleChange} name='accomplishment' />
+          <FormTextArea onChange={e => props.updateFormData(e)} value={props.formData.accomplishment} name='accomplishment' />
         </Form>
         <span style={{display: 'flex', justifyContent: 'space-around', width: '297px'}}>
-        <DecrementButton primary onClick={this.props.previousAcctDetailsStep}>
+        <DecrementButton primary onClick={props.previousAcctDetailsStep}>
           ◀ Back
         </DecrementButton>
-        <IncrementButton primary onClick={this.props.nextAcctDetailsStep}>
+        <IncrementButton primary onClick={props.nextAcctDetailsStep}>
           Next ▶
         </IncrementButton>
         </span>
       </CenteredContainer>
     );
-  }
 }
 
 export default AcctDetailsTwo;

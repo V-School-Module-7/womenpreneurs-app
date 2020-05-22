@@ -13,7 +13,31 @@ const LinkedinInfo = (props) => {
   const [acctDetailsStep, setAcctDetailsStep] = useState(0);
   const [userInfo, setUserInfo] = useState('');
   const [linkedCode, setCode] = useState('');
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    title: "",
+    companyName: "",
+    current: "",
+    helpWith: "",
+    impactGoal: "",
+    accomplishment: ""
+  });
 
+  const updateFormData = e =>
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+
+  const { firstName, 
+          lastName, 
+          title, 
+          companyName, 
+          current, 
+          helpWith, 
+          impactGoal, 
+          accomplishment } = formData;
 
   useEffect(() => {
     if (props.history.location.search) {
@@ -35,7 +59,6 @@ const LinkedinInfo = (props) => {
         console.log('have user obj')
         setUserInfo(userObj)
         if (userInfo) {
-          console.log('we have the user')
           localStorage.setItem("userInfo", JSON.stringify(userInfo))
             // return <Redirect
             //   to={{
@@ -72,9 +95,19 @@ const LinkedinInfo = (props) => {
         title: '',
         companyName: ''
       }
+      if (userObj) {
+        setFormData({
+          firstName: userObj.firstName,
+          lastName: userObj.lastName
+        })
+      }
       return userObj;
     }
-    return
+  }
+
+  const handleSubmit = () => {
+    // handle form submission
+    // user object creation
   }
 
   // NOTE: REFACTOR TO USE STYLED COMPONENTS!!!
@@ -86,27 +119,32 @@ const LinkedinInfo = (props) => {
   // will users want different profile pictures vs their linkedin photos?
   // ex. list dayjob employer on linkedin, but list your startup on womanpreneurs
 
+  console.log('user info', userInfo);
 
-
-
-
-
-  
-  console.log('props', props)
 
   if (acctDetailsStep === 0) {
     return <AcctDetailsOne
               userInfo={userInfo}
               nextAcctDetailsStep={nextAcctDetailsStep}
+              formData={formData}
+              updateFormData={updateFormData}
+              updateFormData={updateFormData}
            />
   } else if (acctDetailsStep === 1) {
     return <AcctDetailsTwo
               nextAcctDetailsStep={nextAcctDetailsStep}
               previousAcctDetailsStep={previousAcctDetailsStep}
+              formData={formData}
+              updateFormData={updateFormData}
+              updateFormData={updateFormData}
            />
   } else if (acctDetailsStep === 2) {
     return <AcctDetailsThree 
-            
+              previousAcctDetailsStep={previousAcctDetailsStep}
+              handleSubmit={handleSubmit}
+              formData={formData}
+              updateFormData={updateFormData}
+              updateFormData={updateFormData}
            />
   } 
 }
