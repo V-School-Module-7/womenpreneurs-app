@@ -67,16 +67,16 @@ class Auth extends React.Component {
     this.props.login(userObj);
   };
 
-  handleEmailPasswordSignup = () => {
+  // handleEmailPasswordSignup = () => {
     
-    // this.props.handleErrorMessage();
-    let userObj = {
-      email: this.state.email,
-      password: this.state.password
-    }
+  //   // this.props.handleErrorMessage();
+  //   let userObj = {
+  //     email: this.state.email,
+  //     password: this.state.password
+  //   }
 
-    this.props.signup(userObj)
-  };
+  //   return this.props.signup(userObj)
+  // };
 
   handleLoginOrSignup = () => {
     this.setState({

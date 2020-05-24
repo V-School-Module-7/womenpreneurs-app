@@ -1,34 +1,25 @@
 import React, {useState, useEffect} from "react";
 import {withRouter, Redirect} from 'react-router-dom';
 import {withUser} from './context/UserProvider';
-import fire from './Firebase';
 import Form from "./components/Forms/Form";
 import FormInput from "./components/Forms/FormInput";
-import FormButton from "./components/Forms/FormButton";
-import LinkedInButton from "./components/Buttons/LinkedInButton";
-import LinkedInButtonLogo from "./components/Logos/LinkedInButtonLogo";
-// import FormTitle from "./components/Forms/FormTitle";
 import CenteredContainer from "./components/Containers/CenteredPageContainer";
 import PageTitle from "./components/Titles/PageTitle";
 import IncrementButton from "./components/Forms/IncrementButton";
-import DecrementButton from "./components/Forms/DecrementButton";
-import FormLabel from "./components/Forms/FormLabel";
-const axios = require('axios');
 require('dotenv').config();
 
 
 const AcctDetailsOne = (props) => {
 
-  console.log('formdata', props.formData);
-  console.log('userInfo', props.userInfo);
+  console.log('acct details one props', props);
 
   return (
     <CenteredContainer>
       <PageTitle>Account Details</PageTitle>
-      {props.userInfo.smallProfileImgUrl ?  <div>
+      {props.formData.smallProfileImage ?  <div>
           <h2>Basic Account Info</h2>
           <div style={{display: 'flex', width: '400px', justifyContent: 'space-around'}}>
-          <img style={{borderRadius: '50%', height: '100px', width: '100px', alignSelf: 'centered'}} src={props.userInfo.smallProfileImgUrl} alt="linkedin profile image"/>
+          <img style={{borderRadius: '50%', height: '100px', width: '100px', alignSelf: 'centered'}} src={props.formData.smallProfileImage} alt="linkedin profile image"/>
           <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
           <span style={{display: 'flex', justifyContent: 'flex-end'}}>
             <h3>{props.formData.firstName}</h3>
@@ -84,4 +75,4 @@ const AcctDetailsOne = (props) => {
 }
 
 
-export default AcctDetailsOne;
+export default withRouter(withUser(AcctDetailsOne));

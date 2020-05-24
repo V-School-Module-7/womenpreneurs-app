@@ -36,12 +36,14 @@ const SignInForm = (props) => {
           type="email"
           name="email"
           placeholder="Email"
+          required
         />
         <FormInput
           onChange={props.handleChange}
           type="password"
           name="password"
           placeholder="Password"
+          required
         />
         <FormButton primary>Log In</FormButton>
       </Form>

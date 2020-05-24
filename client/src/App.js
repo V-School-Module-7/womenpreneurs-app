@@ -7,8 +7,6 @@ import PaymentForm from "./PaymentForm";
 import Global from "./components/Containers/Global";
 import { Switch, Route } from "react-router-dom";
 import Nav from "./Nav";
-import SignUpTwo from "./SignUpTwo";
-import SignUpForm from "./SignUpForm"
 import LinkedinInfo from './LinkedinInfo';
 // import SignUpForm from "./SignUpForm";
 

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {withRouter, Redirect} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 import {withUser} from './context/UserProvider';
 import AcctDetailsOne from './AcctDetailsOne';
 import AcctDetailsTwo from './AcctDetailsTwo';
@@ -11,11 +11,13 @@ require('dotenv').config();
 const LinkedinInfo = (props) => {
   
   const [acctDetailsStep, setAcctDetailsStep] = useState(0);
-  const [userInfo, setUserInfo] = useState('');
   const [linkedCode, setCode] = useState('');
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
+    linkedInId: "",
+    smallProfileImage: "",
+    largeProfileImage: "",
     title: "",
     companyName: "",
     current: "",
@@ -24,54 +26,48 @@ const LinkedinInfo = (props) => {
     accomplishment: ""
   });
 
-  const updateFormData = e =>
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-
-  const { firstName, 
-          lastName, 
-          title, 
-          companyName, 
-          current, 
-          helpWith, 
-          impactGoal, 
-          accomplishment } = formData;
+  console.log('current fb user', fire.auth().currentUser)
+  console.log('porps location history search', props.history.location.search)
 
   useEffect(() => {
-    if (props.history.location.search) {
       let code = props.history.location.search;
       code = code.split('=')[1];
       code = code.split('&')[0]
       console.log('code', code);
       setCode(code)
-      if (linkedCode) {
-        console.log('now can get access token', linkedCode)
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    if (linkedCode) {
+    if (linkedCode !== '' || linkedCode !== null) {
       getData()
-      .then((userObj) => {
-        console.log('have user obj')
-        setUserInfo(userObj)
-        if (userInfo) {
-          localStorage.setItem("userInfo", JSON.stringify(userInfo))
-            // return <Redirect
-            //   to={{
-            //     pathname: "/acctsetup",
-            //     state: { userInfo: localStorage.getItem("userInfo") }
-            //   }}/>
-        }
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    } else {
+      return
     }
-  })
+  });
+  // have a try again button if it doesn't pull linkedin data on page refresh etc
+  const getData = () => {
+    let getLinkedinUser = fire.functions().httpsCallable('linkedinUser')
+    getLinkedinUser({linkedinUser: linkedCode})
+    .then(result => {
+     setFormData({
+      firstName: result.data.firstName.localized.en_US,
+      lastName: result.data.lastName.localized.en_US,
+      linkedInId: result.data.id,
+      largeProfileImage: result.data.profilePicture["displayImage~"].elements[2].identifiers[0].identifier,
+      smallProfileImage: result.data.profilePicture["displayImage~"].elements[0].identifiers[0].identifier,
+      title: "",
+      companyName: "",
+      current: "",
+      helpWith: "",
+      impactGoal: "",
+      accomplishment: ""
+      })
+    })
+    .catch(err => console.dir(err))
+  }
+
+  const updateFormData = e =>
+  setFormData(formData => ({
+    ...formData,
+    [e.target.name]: e.target.value
+  }));
 
   const nextAcctDetailsStep = () => {
     setAcctDetailsStep(acctDetailsStep + 1);
@@ -81,34 +77,10 @@ const LinkedinInfo = (props) => {
     setAcctDetailsStep(acctDetailsStep - 1);
   }
 
-  const getData = async function() {
-    let getLinkedinUser = fire.functions().httpsCallable('linkedinUser')
-    let result = await getLinkedinUser({linkedinUser: linkedCode});
-    if (result) {
-      console.log(result)
-      let userObj = {
-        firstName: result.data.firstName.localized.en_US,
-        lastName: result.data.lastName.localized.en_US,
-        userId: result.data.id,
-        largeProfileImgUrl: result.data.profilePicture["displayImage~"].elements[2].identifiers[0].identifier,
-        smallProfileImgUrl: result.data.profilePicture["displayImage~"].elements[0].identifiers[0].identifier,
-        title: '',
-        companyName: ''
-      }
-      if (userObj) {
-        setFormData({
-          firstName: userObj.firstName,
-          lastName: userObj.lastName
-        })
-      }
-      return userObj;
-    }
-  }
-
-  const handleSubmit = () => {
-    // handle form submission
-    // user object creation
-  }
+  //current user in firebase
+console.log('current user id', props.userId);
+ 
+  console.log('formdata outside function', formData)
 
   // NOTE: REFACTOR TO USE STYLED COMPONENTS!!!
   // handlechange of input to set state for name of input
@@ -119,15 +91,12 @@ const LinkedinInfo = (props) => {
   // will users want different profile pictures vs their linkedin photos?
   // ex. list dayjob employer on linkedin, but list your startup on womanpreneurs
 
-  console.log('user info', userInfo);
 
 
   if (acctDetailsStep === 0) {
     return <AcctDetailsOne
-              userInfo={userInfo}
               nextAcctDetailsStep={nextAcctDetailsStep}
               formData={formData}
-              updateFormData={updateFormData}
               updateFormData={updateFormData}
            />
   } else if (acctDetailsStep === 1) {
@@ -136,14 +105,11 @@ const LinkedinInfo = (props) => {
               previousAcctDetailsStep={previousAcctDetailsStep}
               formData={formData}
               updateFormData={updateFormData}
-              updateFormData={updateFormData}
            />
   } else if (acctDetailsStep === 2) {
     return <AcctDetailsThree 
               previousAcctDetailsStep={previousAcctDetailsStep}
-              handleSubmit={handleSubmit}
               formData={formData}
-              updateFormData={updateFormData}
               updateFormData={updateFormData}
            />
   } 

@@ -1,40 +1,26 @@
 import React, { useState } from "react";
-import {withUser} from './context/UserProvider';
+import { withUser } from './context/UserProvider';
 import Form from "./components/Forms/Form";
 import FormInput from "./components/Forms/FormInput";
 import FormButton from "./components/Forms/FormButton";
 import Horizontal from "./components/Logos/Horizontal";
 import FormTitle from "./components/Forms/FormTitle";
-import fire from './Firebase';
+// import fire from './Firebase';
 
 
 const SignUpOne = (props) => {
 
  const [errMessage, setErrMessage] = useState('')
 
+
   const createUser = event => {
     event.preventDefault()
-    props.handleEmailPasswordSignup();
-    fire.auth().createUserWithEmailAndPassword(props.email, props.password)
-    .then(() => {
-      props.nextStep();
-    })
-    .catch(error => {
-      console.log('error code', error.code)
-      switch (error.code) {
-          case 'auth/email-already-in-use':
-            setErrMessage(`Email address ${props.email} already in use.`);
-            break;
-          case 'auth/invalid-email':
-            setErrMessage(`Email address ${props.email} is invalid.`);
-            break;
-          case 'auth/operation-not-allowed':
-            setErrMessage(`Auth operation not allowed.`);
-            break;
-          default:
-            setErrMessage('Error during signup');
-        }
-    });
+    let userObj = {
+      email: props.email,
+      password: props.password
+    }
+    props.signup(userObj)
+    props.nextStep()
   }
 
 
@@ -59,6 +45,7 @@ const SignUpOne = (props) => {
             type="email"
             name="email"
             placeholder="Email"
+            required
           />
           <FormInput
             onChange={props.handleChange}
@@ -66,10 +53,11 @@ const SignUpOne = (props) => {
             type="password"
             name="password"
             placeholder="Password"
+            required
           />
           <h3>{errMessage}</h3>
           {/* <FormButton primary onClick={createUser}> */}
-          <FormButton primary onClick={props.nextStep}>
+          <FormButton primary onClick={createUser}>
             Sign Up
           </FormButton>
         </Form>

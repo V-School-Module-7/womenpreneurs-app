@@ -1,4 +1,7 @@
 import React, {useEffect, useState} from 'react';
+import {withUser} from './context/UserProvider';
+import {withRouter, Redirect} from 'react-router-dom';
+import fire from './Firebase';
 import Form from "./components/Forms/Form";
 import FormInput from "./components/Forms/FormInput";
 import FormTextArea from "./components/Forms/FormTextArea";
@@ -13,9 +16,40 @@ const AcctDetailsThree = (props) => {
   useEffect(() => {
     //sets the scrollbar to top position, page was loading halfway scrolled
     window.scrollTo(0, 0);
-  })
+  }, [])
 
-  console.log('props', props)
+  let db = fire.firestore()
+  db.settings({ timestampsInSnapshots: true });
+
+
+  const handleUserCreation = e => {
+    e.preventDefault()
+    alert('submitting in three')
+    // handle form submission
+    // user object creation
+    console.log('form data when submittting', props.formData)
+    db.collection("users").add({
+      firstName: props.formData.firstName,
+      lastName: props.formData.lastName,
+      linkedInId: props.formData.linkedInId,
+      smallProfileImage: props.formData.smallProfileImage,
+      largeProfileImage: props.formData.largeProfileImage,
+      title: props.formData.title,
+      companyName: props.formData.companyName,
+      current: props.formData.current,
+      helpWith: props.formData.helpWith,
+      impactGoal: props.formData.impactGoal,
+      accomplishment: props.formData.accomplishment
+    })
+    .then(docRef => {
+      console.log('docRef', docRef)
+      props.history.push("/home")
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  }
+ 
 
 
     return (
@@ -43,11 +77,11 @@ const AcctDetailsThree = (props) => {
           <FormTextArea onChange={e => props.updateFormData(e)} name='accomplishment' value={props.formData.accomplishment} />
           <span style={{display: 'flex', width: '297px', justifyContent: 'space-around'}}>
           <DecrementButton primary onClick={props.previousAcctDetailsStep}>◀ Back</DecrementButton>
-          <FormButton onSubmit={props.handleEmailPasswordSignup} primary >Submit</FormButton>
+          <FormButton onClick={handleUserCreation} primary >Submit</FormButton>
           </span>
         </Form>
       </CenteredContainer>
     )
 }
 
-export default AcctDetailsThree;
+export default withRouter(withUser(AcctDetailsThree));

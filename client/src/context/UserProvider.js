@@ -42,12 +42,24 @@ class UserProvider extends React.Component {
       .then(createdUser => {
         console.log('in .then() create user context', createdUser);
         this.authListener();
-        window.location.href = window.location.origin + '/linkedin';
+        // window.location.href = window.location.origin + '/linkedin';
       })
       .catch(error => {
-        console.log(error);
-        return error
-      });
+          console.log('error code', error.code)
+          switch (error.code) {
+              case 'auth/email-already-in-use':
+                return new Error(`Email address ${userObj.email} already in use.`);
+                break;
+              case 'auth/invalid-email':
+                return new Error(`Email address ${userObj.email} is invalid.`);
+                break;
+              case 'auth/operation-not-allowed':
+                return new Error(`Auth operation not allowed.`);
+                break;
+              default:
+                return new Error('Error during signup');
+            }
+        });
   }
 
   logout = () => {
@@ -97,7 +109,6 @@ class UserProvider extends React.Component {
           login: this.login,
           logout: this.logout,
           hello: 'world',
-          //pass firebase 
           ...this.state,
         }}
       > 

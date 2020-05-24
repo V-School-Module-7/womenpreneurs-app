@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Form from "./components/Forms/Form";
 import FormInput from "./components/Forms/FormInput";
 import FormTextArea from "./components/Forms/FormTextArea";
@@ -9,6 +9,13 @@ import CenteredContainer from "./components/Containers/CenteredPageContainer";
 import FormLabel from "./components/Forms/FormLabel";
 
 const AcctDetailsTwo = (props) => {
+
+  useEffect(() => {
+    //sets the scrollbar to top position, page was loading halfway scrolled
+    window.scrollTo(0, 0);
+  }, [])
+
+
     return (
       <CenteredContainer>
         <FormTitle>Questionnaire</FormTitle>
