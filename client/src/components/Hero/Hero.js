@@ -9,6 +9,7 @@ const LandingHero = styled.div`
   background-image: url(${props => props.backgroundImage});
   background-position: 60% 0%;
   background-repeat: no-repeat;
+  position: relative;
   @media(min-width: 940px) {
     background-size: 100%;
   }
