@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import fire from './Firebase';
 import CenteredContainer from "./components/Containers/CenteredPageContainer";
 import SignUpForm from './SignUpForm';
 import { withRouter } from 'react-router-dom';
@@ -36,81 +37,116 @@ import SignInForm from "./SignInForm";
 // NOTE: NEED ERROR HANDLING FOR PASSWORD ISSUES (MIN LENGTH ETC)
 
 
-class Auth extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+const Auth = props =>  {
+
+
+    const [formData, setFormData] = useState({
       email: "",
       password: "",
       loggingIn: true,
-      authErrMsg: "",
       firstName: '', 
       lastName: '',
       title: '',
       companyName: '',
-    };
+      profileImgUrl: '',
+      current: '',
+      helpWith: '',
+      impactGoal: '',
+      accomplishment: ''
+    });
+    const [loggingIn, setLoginOrLogout] = useState(true);
+    const [profileImage, setProfileImage] = useState('');
+    
 
-  }
-
-  handleChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
-    console.log(e.target.value)
+  const handleChange = e => {
+    let { name, value } = e.target;
+    setFormData(formData => ({
+      ...formData,
+      [name]: value
+  }))
   };
 
-  handleEmailPasswordLogin = (e) => {
+  const handleEmailPasswordLogin = e => {
     e.preventDefault();
+    let userObj = {
+      email: formData.email,
+      password: formData.password
+    }
+    props.login(userObj);
+  };
+
+ const handleEmailPasswordSignup = () => {
+    
     // this.props.handleErrorMessage();
     let userObj = {
-      email: this.state.email,
-      password: this.state.password
+      email: formData.email,
+      password: formData.password
     }
-    this.props.login(userObj);
+
+    return props.signup(userObj)
   };
 
-  // handleEmailPasswordSignup = () => {
-    
-  //   // this.props.handleErrorMessage();
-  //   let userObj = {
-  //     email: this.state.email,
-  //     password: this.state.password
-  //   }
-
-  //   return this.props.signup(userObj)
-  // };
-
-  handleLoginOrSignup = () => {
-    this.setState({
-      loggingIn: !this.state.loggingIn
+  const handleLoginOrSignup = () => {
+    setLoginOrLogout(!loggingIn);
+  }
+  
+  const addPhoto = (profileImage) => {
+    console.log('profile img in auth', profileImage)
+    let name = "Img-"+Date.now(); 
+    let storageRef = fire.storage().ref('/profilePictures/'+ name); 
+    let uploadTask = storageRef.put(profileImage);
+    uploadTask.on('state_changed', function(snapshot){ 
+      // let progress =  
+      //  (snapshot.bytesTransferred / snapshot.totalBytes) * 100; 
+      //   let uploader = document.getElementById('uploader'); 
+      //   uploader.value=progress; 
+      //   switch (snapshot.state) { 
+      //     case fire.storage.TaskState.PAUSED: 
+      //       console.log('Upload is paused'); 
+      //       break; 
+      //     case fire.storage.TaskState.RUNNING: 
+      //       console.log('Upload is running'); 
+      //       break; 
+      //   } 
+  }, function(error) {console.log(error); 
+    }, function() {
+       // get the uploaded image url back 
+       uploadTask.snapshot.ref.getDownloadURL().then( 
+        function(downloadURL) { 
+       // You get your url from here 
+        console.log('File available at', downloadURL); 
+        setProfileImage(downloadURL);
+      // print the image url  
+       console.log(downloadURL); 
+    }); 
     })
   }
 
-
-  render() {
-    console.log('auth props', this.props)
+    console.log('auth props', props)
     return (
-        <CenteredContainer>
-        {this.state.loggingIn ?
+      <CenteredContainer>
+        {loggingIn ?
           <SignInForm 
-            handleLoginOrSignup={this.handleLoginOrSignup}
+            handleLoginOrSignup={handleLoginOrSignup}
+            handleEmailPasswordLogin={handleEmailPasswordLogin}
+            handleChange={handleChange}
           />
           :
-          <>
             <SignUpForm 
-              handleChange={this.handleChange}
-              handleEmailPasswordLogin={this.handleEmailPasswordLogin}
-              handleEmailPasswordSignup={this.handleEmailPasswordSignup}  
-              loggingIn={this.state.loggingIn}
-              handleLoginOrSignup={this.handleLoginOrSignup}
-              email={this.state.email}
-              password={this.state.password}
+              handleChange={handleChange}
+              handleEmailPasswordLogin={handleEmailPasswordLogin}
+              handleEmailPasswordSignup={handleEmailPasswordSignup}  
+              loggingIn={formData.loggingIn}
+              handleLoginOrSignup={handleLoginOrSignup}
+              addPhoto={addPhoto}
+              email={formData.email}
+              password={formData.password}
+              formData={formData}
+              profileImage={profileImage}
             />
-          </>
         }
-
-          {/* {this.state.authErrMsg && this.state.authErrMsg} */}
-        </CenteredContainer>
+      </CenteredContainer>
     );
-  }
 }
 
 export default withRouter(withUser(Auth));

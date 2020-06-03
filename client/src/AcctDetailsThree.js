@@ -23,8 +23,7 @@ const AcctDetailsThree = (props) => {
 
 
   const handleUserCreation = e => {
-    e.preventDefault()
-    alert('submitting in three')
+    e.preventDefault();
     // handle form submission
     // user object creation
     console.log('form data when submittting', props.formData)
@@ -32,8 +31,7 @@ const AcctDetailsThree = (props) => {
       firstName: props.formData.firstName,
       lastName: props.formData.lastName,
       linkedInId: props.formData.linkedInId,
-      smallProfileImage: props.formData.smallProfileImage,
-      largeProfileImage: props.formData.largeProfileImage,
+      profileImgUrl: props.formData.profileImgUrl,
       title: props.formData.title,
       companyName: props.formData.companyName,
       current: props.formData.current,

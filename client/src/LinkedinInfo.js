@@ -29,29 +29,29 @@ const LinkedinInfo = (props) => {
   console.log('current fb user', fire.auth().currentUser)
   console.log('porps location history search', props.history.location.search)
 
-  useEffect(() => {
-      let code = props.history.location.search;
-      code = code.split('=')[1];
-      code = code.split('&')[0]
-      console.log('code', code);
-      setCode(code)
-    if (linkedCode !== '' || linkedCode !== null) {
-      getData()
-    } else {
-      return
-    }
-  });
+  // useEffect(() => {
+  //     let code = props.history.location.search;
+  //     code = code.split('=')[1];
+  //     code = code.split('&')[0]
+  //     console.log('code', code);
+  //     setCode(code)
+  //   if (linkedCode !== '' || linkedCode !== null) {
+  //     getData()
+  //   } else {
+  //     return
+  //   }
+  // });
   // have a try again button if it doesn't pull linkedin data on page refresh etc
   const getData = () => {
     let getLinkedinUser = fire.functions().httpsCallable('linkedinUser')
     getLinkedinUser({linkedinUser: linkedCode})
     .then(result => {
+      console.log('linkedin result', result)
      setFormData({
       firstName: result.data.firstName.localized.en_US,
       lastName: result.data.lastName.localized.en_US,
       linkedInId: result.data.id,
-      largeProfileImage: result.data.profilePicture["displayImage~"].elements[2].identifiers[0].identifier,
-      smallProfileImage: result.data.profilePicture["displayImage~"].elements[0].identifiers[0].identifier,
+      profileImgUrl: result.data.profilePicture["displayImage~"].elements[2].identifiers[0].identifier,
       title: "",
       companyName: "",
       current: "",
@@ -63,11 +63,13 @@ const LinkedinInfo = (props) => {
     .catch(err => console.dir(err))
   }
 
-  const updateFormData = e =>
-  setFormData(formData => ({
-    ...formData,
-    [e.target.name]: e.target.value
-  }));
+  const updateFormData = (e) => {
+   let { name, value } = e.target;
+    setFormData(formData => ({
+      ...formData,
+      [name]: value
+  }))
+};
 
   const nextAcctDetailsStep = () => {
     setAcctDetailsStep(acctDetailsStep + 1);
@@ -78,9 +80,6 @@ const LinkedinInfo = (props) => {
   }
 
   //current user in firebase
-console.log('current user id', props.userId);
- 
-  console.log('formdata outside function', formData)
 
   // NOTE: REFACTOR TO USE STYLED COMPONENTS!!!
   // handlechange of input to set state for name of input
@@ -98,6 +97,9 @@ console.log('current user id', props.userId);
               nextAcctDetailsStep={nextAcctDetailsStep}
               formData={formData}
               updateFormData={updateFormData}
+              linkedCode={linkedCode}
+              setCode={setCode}
+              getData={getData}
            />
   } else if (acctDetailsStep === 1) {
     return <AcctDetailsTwo

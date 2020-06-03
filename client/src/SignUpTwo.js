@@ -68,8 +68,7 @@ const SignUpTwo = (props) => {
         firstName: result.data.firstName.localized.en_US,
         lastName: result.data.lastName.localized.en_US,
         userId: result.data.id,
-        largeProfileImgUrl: result.data.profilePicture["displayImage~"].elements[2].identifiers[0].identifier,
-        smallProfileImgUrl: result.data.profilePicture["displayImage~"].elements[0].identifiers[0].identifier,
+        profileImgUrl: result.data.profilePicture["displayImage~"].elements[2].identifiers[0].identifier,
         title: '',
         companyName: ''
       }
@@ -88,10 +87,7 @@ const SignUpTwo = (props) => {
   // ex. list dayjob employer on linkedin, but list your startup on womanpreneurs
 
   // note: Add social media links to form
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert("submitted");
-  };
+ 
 
   const callLinkedIn = () => {
    window.open(`http://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=86pzo1h1r9o6iu&redirect_uri=http://localhost:3000/acctsetup&state=vrstr238957xvbthg&scope=r_liteprofile%20r_emailaddress`, '_top')

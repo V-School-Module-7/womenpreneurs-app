@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { withUser } from './context/UserProvider';
+import {withRouter} from 'react-router-dom';
 import Form from "./components/Forms/Form";
 import FormInput from "./components/Forms/FormInput";
 import FormButton from "./components/Forms/FormButton";
@@ -10,21 +11,30 @@ import FormTitle from "./components/Forms/FormTitle";
 
 const SignUpOne = (props) => {
 
- const [errMessage, setErrMessage] = useState('')
-
+  const [emailPassword, setEmailPassword] = useState({
+    email: '',
+    password: ''
+  })
 
   const createUser = event => {
     event.preventDefault()
     let userObj = {
-      email: props.email,
-      password: props.password
+      email: emailPassword.email,
+      password: emailPassword.password
     }
     props.signup(userObj)
     props.nextStep()
   }
 
+  const updateEmailPassword = (e) => {
+    console.log('emailpass', emailPassword)
+    let { name, value } = e.target;
+     setEmailPassword(emailPassword => ({
+       ...emailPassword,
+       [name]: value
+   }))
+  }
 
-  console.log('props', props)
     return (
       <>
       <Horizontal />
@@ -40,22 +50,22 @@ const SignUpOne = (props) => {
         <Form>
           <FormTitle>Sign up</FormTitle>
           <FormInput
-            onChange={props.handleChange}
-            value={props.value}
+            onChange={updateEmailPassword}
+            value={emailPassword.email}
             type="email"
             name="email"
             placeholder="Email"
             required
           />
           <FormInput
-            onChange={props.handleChange}
-            value={props.value}
+            onChange={updateEmailPassword}
+            value={emailPassword.password}
             type="password"
             name="password"
             placeholder="Password"
             required
           />
-          <h3>{errMessage}</h3>
+          {/* <h3>{errMessage}</h3> */}
           {/* <FormButton primary onClick={createUser}> */}
           <FormButton primary onClick={createUser}>
             Sign Up
@@ -65,4 +75,4 @@ const SignUpOne = (props) => {
     );
 }
 
-export default withUser(SignUpOne);
+export default withRouter(withUser(SignUpOne));

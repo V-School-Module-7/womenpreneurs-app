@@ -61,6 +61,7 @@ exports.linkedinUser = functions.https.onCall((data, context) => {
         .then((response) => {
             // make second request to linkedin for the user info
             // respones.access_token
+            console.log('response access token', response.access_token)
             return axios.get('https://api.linkedin.com/v2/me?projection=(id,firstName,lastName,email-address,public-profile-url,profilePicture(displayImage~:playableStreams))', {
                 headers: {
                     Authorization: `Bearer ${response.access_token}`
