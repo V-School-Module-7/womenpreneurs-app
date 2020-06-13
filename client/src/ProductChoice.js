@@ -1,26 +1,50 @@
 import React, {useState} from 'react';
 import {Link,withRouter} from 'react-router-dom';
 import {withUser} from './context/UserProvider';
-import {NextButton, PaymentOptions} from './Styles';
-import {RadioGroup, Radio} from 'react-radio-group';
+import {NextButton, PaymentOptions, CouponCode} from './Styles';
 import fire from './Firebase';
 import hands from './img/hand.png';
 import shake from './img/handshake.png';
 import bulb from './img/lightbulb.png';
 
-
-
 const ProductChoice = (props) => {
 
     const [price,setPrice] = useState("");
+    const [coupon,setCoupon] = useState("");
+    const [yearly,setYearly] = useState(180);
+    const [quarterly,setQuarterly] = useState(60);
+
+    const data = {plan:'',coupon:''}
+    const [info, setInfo] = useState(data)
+
+    // const onSuggestSelect = (suggest) => {
+    //     setData(...prevInputs => ({...prevInputs,
+    //         plan:suggest.plan
+    //     }))
+    // }
+
+    const setCouponFunction = (coupon) => {
+        if (coupon === "free10"){
+            setYearly(162)
+            setQuarterly(54)
+
+            setInfo(prevInputs => ({...prevInputs,
+                coupon:coupon
+            }))
+        }
+    }
 
     const setPriceFunction = (price) => {
-        console.log(price);
         setPrice(price)
-        const createPaymentIntent= fire.functions().httpsCallable('createPaymentIntent')
-        createPaymentIntent(price);
-        props.history.push(`/paymentform`)
-        
+        setInfo(prevInputs => ({...prevInputs,
+            plan:price
+        }))
+      
+        // const createPaymentIntent = fire.functions().httpsCallable('createPaymentIntent')
+        // createPaymentIntent(price);
+        const createStripeSubscription = fire.functions().httpsCallable('createStripeSubscription')
+        createStripeSubscription(info)
+       // props.history.push(`/paymentform`)
     }
 
     const handleSubmit = async event => {
@@ -28,9 +52,7 @@ const ProductChoice = (props) => {
     };
         return (
 
-                
             <PaymentOptions>
-
                 <div className = "div-one">
                     <div className="div-one-text">
                         BECOMING GREAT ENTREPRENEURS
@@ -108,13 +130,24 @@ const ProductChoice = (props) => {
                
                 <form onSubmit={handleSubmit}>
 
-                <NextButton value = "$60" onClick={e => setPriceFunction(e.target.value)} 
-                             >Quarterly $60</NextButton> 
-                <NextButton value = "$180" onClick={e => setPriceFunction(e.target.value)}>Yearly $180 (Save 33%)</NextButton>
+                <div className="card-input-row"> 
+        
+        </div>
+                <CouponCode>
+                    <input className="coupon" placeholder="Coupon Code" value = {coupon} onChange={e => setCoupon(e.target.value)}></input>
+                    <NextButton onClick={e => setCouponFunction(coupon)}>Apply</NextButton>
+                </CouponCode>
+
+             <NextButton value = "quarterly" onClick={e => setPriceFunction(e.target.value)} 
+                    >Quarterly ${quarterly}</NextButton> 
+                <NextButton value = "yearly" onClick={e => setPriceFunction(e.target.value)}>Yearly ${yearly}</NextButton> 
+                
                 </form>
             </PaymentOptions>
          
         );
     
 };
+
+
 export default withRouter(withUser(ProductChoice));

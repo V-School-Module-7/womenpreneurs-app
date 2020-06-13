@@ -66,6 +66,7 @@ class UserProvider extends React.Component {
       console.log('you are...', token)
     });
   }
+
   
   authListener = () => {
     firebase.auth().onAuthStateChanged(user => {
@@ -96,23 +97,19 @@ class UserProvider extends React.Component {
       <UserContext.Provider
         value={{
           ...this.state,
-          
           signup: this.signup,
           login: this.login,
           logout: this.logout,
           showToken: this.showToken
         }}
       >
-
         { this.props.children }
       </UserContext.Provider>
     )
   }
-
 }
 
 export default UserProvider;
-
 
 export const withUser = (C) => (props) => (
   <UserContext.Consumer>

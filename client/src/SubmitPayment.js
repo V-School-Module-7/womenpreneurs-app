@@ -1,7 +1,7 @@
 import React, {useMemo, useState, useEffect} from 'react';
 import {Link,withRouter} from 'react-router-dom';
 import {withUser} from './context/UserProvider';
-import {PayButton, PaymentStyles, Lady, SuccessPage, SubmitPaymentStyles} from './Styles';
+import {PayButton, PaymentStyles, Lady, SuccessPage, SubmitPaymentStyles,NextButton, PaymentOptions, CouponCode} from './Styles';
 import {Checkmark} from 'react-checkmark';
 import fire from './Firebase';
 import PhoneInput from 'react-phone-number-input';
@@ -51,15 +51,18 @@ const SubmitPayment = (props) => {
   const options = useOptions();
 
   const [success, setSuccess] = useState(null);
-  const [coupon, setCoupon] = useState("");
   const [phone, setPhone] = useState(null);
-  const attachPaymentSource =  fire.functions().httpsCallable('attachPaymentSource');
+  const [yearly,setYearly] = useState(180);
+  const [quarterly,setQuarterly] = useState(60);
 
-  const startSubscription= (coupon) => {
-    setCoupon(coupon)
-    const createDiscount = fire.functions().httpsCallable('createDiscount')
-    createDiscount(coupon)
-  }
+  const attachPaymentSource =  fire.functions().httpsCallable('attachPaymentSource');
+  const createStripeSubscription = fire.functions().httpsCallable('createStripeSubscription')
+  const createPaymentIntent = fire.functions().httpsCallable('createPaymentIntent')
+
+
+  const data = {plan:'',coupon:'',paymentInfo:''}
+  const [info, setInfo] = useState(data)
+
 
   const handleSubmit = async event => {
     event.preventDefault();
@@ -69,52 +72,104 @@ const SubmitPayment = (props) => {
       // form submission until Stripe.js has loaded.
       return;
     }
-    //const createStripeSubscription = fire.functions().httpsCallable('createStripeSubscription')
-    
+
+    createStripeSubscription(info)
+    props.history.push(`/productchoice`);
+   // console.log("[PaymentMethod]", payload.paymentMethod.id);
+
+  }
+
+  const [coupon,setCoupon] = useState("")
+
+  const setValueFunction = async event => {
     const payload = await stripe.createPaymentMethod({
       type: "card",
       card: elements.getElement(CardElement)
     })
 
-    attachPaymentSource(payload.paymentMethod.id);
+    setInfo(prevInputs => ({...prevInputs,
+      paymentInfo:payload.paymentMethod.id
+    }))
 
-    payload ? setSuccess(true) : setSuccess(false);
-    console.log("[PaymentMethod]", payload.paymentMethod.id)
-  };
+  }
+
+  const setPriceFunction = (price) => {
+
+    if (price === "quarterly"){
+      setInfo(prevInputs => ({...prevInputs,
+          plan:"quarterly"
+      }))
+    }else 
+      setInfo(prevInputs => ({...prevInputs,
+        plan:"yearly"
+      }))
+
+    console.log(data)
+   //createPaymentIntent(price)
+   
+   // props.history.push(`/paymentform`) 
+  }
+
+  const setCouponFunction = (coupon) => {
+    if (coupon === "free10"){
+        setYearly(162)
+        setQuarterly(54)
+
+        setInfo(prevInputs => ({...prevInputs,
+            coupon:coupon
+        }))
+    }
+    console.log('')
+  }
 
 
   return success ? (
     <SuccessPage>
       <div className="success">
         <Checkmark size='xxLarge'/>
-        <div className="success-text">Payment successful!</div>
+        <div className="success-text">Payment Added</div>
         <img src={yay}/>
       </div>
       
     </SuccessPage>
   ) : (
-  
-    
-      <SubmitPaymentStyles >
-        <form onSubmit={handleSubmit}>
+      <SubmitPaymentStyles>
+       <div>
+        <CouponCode>
+          <input className="coupon" placeholder="Coupon Code" value = {coupon} onChange={e => setCoupon(e.target.value)}></input>
+          <NextButton onClick={e => setCouponFunction(coupon)}>Apply</NextButton>
+        </CouponCode>
+
+        <NextButton value = "quarterly" onClick={e => setPriceFunction(e.target.value)} 
+          >Quarterly ${quarterly}</NextButton> 
+        <NextButton value = "yearly" onClick={e => setPriceFunction(e.target.value)}>Yearly ${yearly}</NextButton> 
+       
+       </div>
+        
         <div className="card-input-row"> 
             <input type="text" placeholder="Name"></input>
         </div>
         <div className="card-input-row"> 
             <input type="text" placeholder="Email"></input>
         </div>
-            <PhoneInput country={"us"} defaultCountry="US" placeholder="208-347-7262" value="phone" className="phone-input" onChange={() => setPhone("test")}
-            />
-         
-        <CardElement options={options}/>
-          <PayButton type="submit" disabled={!stripe} className="button">
+          <PhoneInput country={"us"} defaultCountry="US" placeholder="XXX-XXX-XXXX" value="phone" className="phone-input" onChange={() => setPhone("test")}/>
+          <CardElement options={options}/>
+
+          <NextButton onClick={e => setValueFunction(e.target.value)} className="button">
+            Apply 
+          </NextButton>
+
+       
+      
+        <form onSubmit={handleSubmit}>
+        <PayButton type="submit" disabled={!stripe} className="button">
             Submit 
           </PayButton>
         </form>
       {/* <Lady src={LadyImg}></Lady> */}
       </SubmitPaymentStyles>
   
-  );
+  )
 };
 
 export default withRouter(withUser(SubmitPayment));

@@ -110,6 +110,30 @@ export const SubmitPaymentStyles=styled.fieldset`
     }
 
 `
+
+export const CouponCode = styled.div`
+    display:flex;
+    font-family:Source Code Pro, monospace;
+    font-size:20px;
+    color:white;
+    border-radius:8px;
+    width:100%;
+    height:100px;
+    margin-top:8px ;
+    font-size: 26px;
+    font-family: 'Jost', sans-serif;
+    height:110px;
+
+    .coupon{
+        margin-top:8px ;
+        border-radius:8px;
+        height:100px;
+        width:70%;
+        font-size:30px;
+    }
+`
+
+
 export const Lady = styled.img`
     display:flex;
     height:350px;
@@ -165,13 +189,27 @@ export const NextButton = styled.button `
     padding:16px;
     width: 50%;
     height: 100px;
-  
-    margin-top:8px ;
+    margin-top:8px;
     font-size: 26px;
     box-shadow: 3px 3px #8B7071;
     font-family: 'Jost', sans-serif;
 `
-
+export const ChoiceButton = styled.div `
+    display:flex;
+    flex-wrap:wrap;
+    background-color:#D58346;
+    font-family:Source Code Pro, monospace;
+    font-size:20px;
+    color:white;
+    border-radius:8px;
+    padding:16px;
+    width: 40%;
+    height: 100px;
+    margin-top:8px;
+    font-size: 26px;
+    box-shadow: 3px 3px #8B7071;
+    font-family: 'Jost', sans-serif;
+`
 
 
 export const PaymentOptions = styled.div`
@@ -182,6 +220,7 @@ export const PaymentOptions = styled.div`
     margin: 0 auto;
     width:100%;
     height:100%;
+
 
     .gap-one{
         background-color:#687D89;
