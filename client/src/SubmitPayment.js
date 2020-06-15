@@ -19,6 +19,7 @@ import {
 require('dotenv').config();
 
 const stripe = require('stripe')(process.env.REACT_APP_STRIPE_SECRET_KEY);
+var stripeId = '';
 
 const useOptions = () => {
   const options = useMemo(
@@ -73,7 +74,18 @@ const SubmitPayment = (props) => {
       return;
     }
 
-    createStripeSubscription(info)
+    const card = elements.getElement(CardElement);
+
+    const result = await stripe.createToken(card);
+    if (result.error) {
+      console.log(result.error.message);
+    } else {
+      createStripeSubscription(info)
+      console.log(result.token);
+      // pass the token to your backend API
+    }
+
+   // createStripeSubscription(info)
     props.history.push(`/productchoice`);
    // console.log("[PaymentMethod]", payload.paymentMethod.id);
 
@@ -81,16 +93,17 @@ const SubmitPayment = (props) => {
 
   const [coupon,setCoupon] = useState("")
 
-  const setValueFunction = async event => {
-    const payload = await stripe.createPaymentMethod({
-      type: "card",
-      card: elements.getElement(CardElement)
-    })
+  const setValueFunction = () => {
+    const card = elements.getElement(CardElement)
+    attachPaymentSource(card)
+    // const payload = await stripe.createPaymentMethod({
+    //   type: "card",
+    //   card: elements.getElement(CardElement)
+    // })
 
-    setInfo(prevInputs => ({...prevInputs,
-      paymentInfo:payload.paymentMethod.id
-    }))
-
+    // setInfo(prevInputs => ({...prevInputs,
+    //   paymentInfo:payload.paymentMethod.id
+    // }))
   }
 
   const setPriceFunction = (price) => {
@@ -104,10 +117,6 @@ const SubmitPayment = (props) => {
         plan:"yearly"
       }))
 
-    console.log(data)
-   //createPaymentIntent(price)
-   
-   // props.history.push(`/paymentform`) 
   }
 
   const setCouponFunction = (coupon) => {
@@ -119,7 +128,7 @@ const SubmitPayment = (props) => {
             coupon:coupon
         }))
     }
-    console.log('')
+    console.log(props)
   }
 
 
@@ -155,7 +164,7 @@ const SubmitPayment = (props) => {
           <PhoneInput country={"us"} defaultCountry="US" placeholder="XXX-XXX-XXXX" value="phone" className="phone-input" onChange={() => setPhone("test")}/>
           <CardElement options={options}/>
 
-          <NextButton onClick={e => setValueFunction(e.target.value)} className="button">
+          <NextButton onClick={setValueFunction} className="button">
             Apply 
           </NextButton>
 

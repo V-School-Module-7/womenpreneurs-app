@@ -73,7 +73,8 @@ class UserProvider extends React.Component {
       if (user) {
         this.setState({
           user: user,
-          uid: user.uid
+          uid: user.uid,
+          
         });
           localStorage.setItem("uid", user.uid);
           localStorage.setItem("user", user)

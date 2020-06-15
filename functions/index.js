@@ -39,13 +39,16 @@ exports.attachPaymentSource = functions.https.onCall(async(data,context) => {
       const userInfoVal = userInfo.data();
       const stripeId = userInfoVal.customer_id;
 
-      const paymentMethodAttach = await stripe.paymentMethods.attach(
-        data,
-        {
-          customer:stripeId,
-        }
-      );
-      return admin.firestore().collection('stripe_customers').doc(user.uid).collection('tokens').add({token:data});
+      //const response = await stripe.customers.createSource(stripeId, {source: token});
+
+      //return admin.firestore().collection('stripe_customers').doc(user.uid).collection("sources").doc(response.fingerprint).set(response, {merge: true});
+
+      const paymentMethodAttach = await stripe.paymentMethods.create({
+        type:'card',
+        card:data
+      })
+      // );
+      // return admin.firestore().collection('stripe_customers').doc(user.uid).collection('tokens').add({token:data});
     } catch (error) {
         return('Something Went Wrong')
     }
@@ -86,7 +89,7 @@ exports.createStripeSubscription = functions.https.onCall(async(data,context) =>
               
             }],
             coupon:data.coupon,
-           // default_payment_method:data.paymentInfo
+            default_payment_method:data.paymentInfo
            
         }); 
        return userInfoVal;
