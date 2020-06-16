@@ -179,6 +179,30 @@ export const PayButton = styled.button `
     box-shadow: 3px 3px #8B7071;
 `
 
+export const ApplyButton = styled.button `
+    background-color:#D58346;
+    font-family:Source Code Pro, monospace;
+    font-size:20px;
+    color:white;
+    border-radius:8px;
+    padding:16px;
+    width: 100%;
+    margin-top:8px ;
+    font-size: 16px;
+    box-shadow: 3px 3px #8B7071;
+`
+
+export const ChoiceBox = styled.div `
+    font-family:Source Code Pro, monospace;
+    font-size:20px;
+    color:black;
+    width: 100%;
+    margin-top:8px ;
+    font-size: 16px;
+    text-align:center;
+`
+
+
 export const NextButton = styled.button `
    
     background-color:#D58346;

@@ -1,7 +1,7 @@
 import React, {useMemo, useState, useEffect} from 'react';
-import {Link,withRouter} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 import {withUser} from './context/UserProvider';
-import {PayButton, PaymentStyles, Lady, SuccessPage, SubmitPaymentStyles,NextButton, PaymentOptions, CouponCode} from './Styles';
+import {PayButton, ChoiceBox, SuccessPage,ApplyButton,SubmitPaymentStyles,NextButton, CouponCode} from './Styles';
 import {Checkmark} from 'react-checkmark';
 import fire from './Firebase';
 import PhoneInput from 'react-phone-number-input';
@@ -10,16 +10,12 @@ import yay from './img/yay.png';
 import {
   useStripe,
   useElements,
-  CardElement,
-  CardNumberElement,
-  CardCvcElement,
-  CardExpiryElement
+  CardElement
 } from "@stripe/react-stripe-js";
 
 require('dotenv').config();
 
 const stripe = require('stripe')(process.env.REACT_APP_STRIPE_SECRET_KEY);
-var stripeId = '';
 
 const useOptions = () => {
   const options = useMemo(
@@ -55,10 +51,12 @@ const SubmitPayment = (props) => {
   const [phone, setPhone] = useState(null);
   const [yearly,setYearly] = useState(180);
   const [quarterly,setQuarterly] = useState(60);
+  const [plan,sayPlan] = useState('');
+  const [payment,sayPaymentAdded] = useState('');
 
   const attachPaymentSource =  fire.functions().httpsCallable('attachPaymentSource');
   const createStripeSubscription = fire.functions().httpsCallable('createStripeSubscription')
-  const createPaymentIntent = fire.functions().httpsCallable('createPaymentIntent')
+
 
 
   const data = {plan:'',coupon:'',paymentInfo:''}
@@ -74,36 +72,33 @@ const SubmitPayment = (props) => {
       return;
     }
 
-    const card = elements.getElement(CardElement);
-
-    const result = await stripe.createToken(card);
-    if (result.error) {
-      console.log(result.error.message);
-    } else {
+    try{
       createStripeSubscription(info)
-      console.log(result.token);
-      // pass the token to your backend API
-    }
-
-   // createStripeSubscription(info)
-    props.history.push(`/productchoice`);
-   // console.log("[PaymentMethod]", payload.paymentMethod.id);
+      return setSuccess(true)
+    } catch (error) {
+      console.log(error)
+    } 
 
   }
 
   const [coupon,setCoupon] = useState("")
 
-  const setValueFunction = () => {
-    const card = elements.getElement(CardElement)
-    attachPaymentSource(card)
-    // const payload = await stripe.createPaymentMethod({
-    //   type: "card",
-    //   card: elements.getElement(CardElement)
-    // })
+  const setValueFunction = async (event) => {
+    event.preventDefault();
 
-    // setInfo(prevInputs => ({...prevInputs,
-    //   paymentInfo:payload.paymentMethod.id
-    // }))
+    const cardElement = elements.getElement(CardElement)
+    
+    
+    const payload = await stripe.createPaymentMethod({
+      type: "card",
+      card: cardElement
+    })
+    attachPaymentSource(payload.paymentMethod.id)
+    setInfo(prevInputs => ({...prevInputs,
+      paymentInfo:payload.paymentMethod.id
+    }))
+
+    sayPaymentAdded('Payment Added')
   }
 
   const setPriceFunction = (price) => {
@@ -116,7 +111,7 @@ const SubmitPayment = (props) => {
       setInfo(prevInputs => ({...prevInputs,
         plan:"yearly"
       }))
-
+      sayPlan(price + ' added')
   }
 
   const setCouponFunction = (coupon) => {
@@ -164,9 +159,9 @@ const SubmitPayment = (props) => {
           <PhoneInput country={"us"} defaultCountry="US" placeholder="XXX-XXX-XXXX" value="phone" className="phone-input" onChange={() => setPhone("test")}/>
           <CardElement options={options}/>
 
-          <NextButton onClick={setValueFunction} className="button">
+          <ApplyButton onClick={setValueFunction} className="button">
             Apply 
-          </NextButton>
+          </ApplyButton> 
 
        
       
@@ -175,7 +170,12 @@ const SubmitPayment = (props) => {
             Submit 
           </PayButton>
         </form>
-      {/* <Lady src={LadyImg}></Lady> */}
+
+      <ChoiceBox>
+        {plan} 
+        <br/>
+        {payment}
+      </ChoiceBox>
       </SubmitPaymentStyles>
   
   )

@@ -32,6 +32,10 @@ exports.createStripeCustomer = functions.auth.user().onCreate(async (user) => {
     return admin.firestore().collection('stripe_customers').doc(user.uid).set({customer_id: customer.id});
 });
 
+
+/*Past this line, code is developed by Patrice Blocker*/
+
+
 exports.attachPaymentSource = functions.https.onCall(async(data,context) => {
     console.log('attach payment source entry point')
     try{
@@ -39,41 +43,12 @@ exports.attachPaymentSource = functions.https.onCall(async(data,context) => {
       const userInfoVal = userInfo.data();
       const stripeId = userInfoVal.customer_id;
 
-      //const response = await stripe.customers.createSource(stripeId, {source: token});
+      stripe.paymentMethods.attach(data,{customer:stripeId})
 
-      //return admin.firestore().collection('stripe_customers').doc(user.uid).collection("sources").doc(response.fingerprint).set(response, {merge: true});
-
-      const paymentMethodAttach = await stripe.paymentMethods.create({
-        type:'card',
-        card:data
-      })
-      // );
-      // return admin.firestore().collection('stripe_customers').doc(user.uid).collection('tokens').add({token:data});
+    
+     return admin.firestore().collection('stripe_customers').doc(user.uid).collection('tokens').add({token:data});
     } catch (error) {
         return('Something Went Wrong')
-    }
-});
-
-exports.createPaymentIntent = functions.https.onCall(async(data,context) => {
-    try {
-      const userInfo = await admin.firestore().collection('stripe_customers').doc(context.auth.uid).get();
-      const userInfoVal = userInfo.data();
-      const stripeId = userInfoVal.customer_id;
-
-      //idempotencyKey to protect against double charges
-      const idempotencyKey = context.auth.uid;
-
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount: data === "quarterly" ? 600 : 1800,
-        currency: 'usd',
-        customer: stripeId,
-        setup_future_usage:on_session,
-      });
-
-      //return userInfoVal;
-      return admin.firestore().collection('stripe_customers').doc(context.params.userId).collection("sources").doc(response.fingerprint).set(response, {merge: true});
-    } catch (error) {
-      return('Something Went Wrong')
     }
 });
 
