@@ -3,7 +3,12 @@ import Hero from './components/Hero/Hero';
 import HeroBanner from './components/Hero/HeroBanner';
 import HeroBannerHeader from './components/Hero/HeroBannerHeader';
 import HeroBannerSecondary from './components/Hero/HeroBannerSecondary';
+import CenteredContainer from './components/Containers/CenteredPageContainer'
+import AscendaNews from './AscendaNews';
+import MyMentors from './MyMentors';
+import MyProgram from './MyProgram';
 import {Link} from 'react-router-dom';
+;
 
 const Home = () => {
 
@@ -22,6 +27,9 @@ const Home = () => {
               </HeroBannerSecondary>
             </HeroBanner>
         </Hero>
+        <AscendaNews />
+        <MyMentors />
+        <MyProgram />
     </div>
   )
 }

@@ -15,6 +15,7 @@ const LandingHero = styled.div`
   }
   @media(max-width: 940px) {
     background-size: 940px;
+    justify-content: center;
   }
 `
 

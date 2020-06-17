@@ -4,20 +4,20 @@ import styled from 'styled-components';
 const HeroBanner = styled.div`
   background-color: #98BAE9;
   display: block;
-  width: 350px;
-  height: 130px;
+  width: 380px;
+  height: 160px;
   padding: 15px;
-  box-shadow: -20px -20px 0 0px #ffffff;
+  box-shadow: -20px -20px 0 0px rgb(255, 255, 255, 0.8);
   position: absolute;
   top: 56px;
   left: 56px;
   @media(max-width: 500px) {
-    left: 32px;
+    left: 24px;
     top: 32px;
   }
   @media(min-width: 900px) {
-    width: 450px;
-    height: 230px;
+    width: 500px;
+    height: 280px;
   }
 `
 

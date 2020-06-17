@@ -7,7 +7,7 @@ const HeroBannerHeader = styled.h1`
   font-weight: normal;
   color: #ffffff;
   @media(min-width: 900px) {
-    font-size: 55px;
+    font-size: 70px;
   }
 `
 

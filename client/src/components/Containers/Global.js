@@ -9,6 +9,7 @@ const Global = createGlobalStyle`
     padding: 0;
     font-family: 'Nunito', sans-serif;
     -webkit-font-smoothing: subpixel-antialiased;
+    font-size: 16px;
   }
 `
 
