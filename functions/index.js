@@ -43,9 +43,8 @@ exports.attachPaymentSource = functions.https.onCall(async(data,context) => {
       const userInfoVal = userInfo.data();
       const stripeId = userInfoVal.customer_id;
 
-      stripe.paymentMethods.attach(data,{customer:stripeId})
+      stripe.paymentMethods.attach(data,{customer:stripeId});
 
-    
      return admin.firestore().collection('stripe_customers').doc(user.uid).collection('tokens').add({token:data});
     } catch (error) {
         return('Something Went Wrong')

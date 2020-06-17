@@ -55,9 +55,7 @@ const SubmitPayment = (props) => {
   const [payment,sayPaymentAdded] = useState('');
 
   const attachPaymentSource =  fire.functions().httpsCallable('attachPaymentSource');
-  const createStripeSubscription = fire.functions().httpsCallable('createStripeSubscription')
-
-
+  const createStripeSubscription = fire.functions().httpsCallable('createStripeSubscription');
 
   const data = {plan:'',coupon:'',paymentInfo:''}
   const [info, setInfo] = useState(data)
@@ -93,7 +91,9 @@ const SubmitPayment = (props) => {
       type: "card",
       card: cardElement
     })
+
     attachPaymentSource(payload.paymentMethod.id)
+
     setInfo(prevInputs => ({...prevInputs,
       paymentInfo:payload.paymentMethod.id
     }))
@@ -116,6 +116,7 @@ const SubmitPayment = (props) => {
 
   const setCouponFunction = (coupon) => {
     if (coupon === "free10"){
+      
         setYearly(162)
         setQuarterly(54)
 
@@ -163,8 +164,6 @@ const SubmitPayment = (props) => {
             Apply 
           </ApplyButton> 
 
-       
-      
         <form onSubmit={handleSubmit}>
         <PayButton type="submit" disabled={!stripe} className="button">
             Submit 
