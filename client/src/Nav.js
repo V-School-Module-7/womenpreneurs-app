@@ -21,7 +21,6 @@ class Nav extends React.Component {
         {this.props.uid ? <button style={{marginLeft: '40px'}} onClick={this.handleLogout}>Logout</button> : <Link to='/auth' style={{marginLeft: '40px'}}>Login</Link> }
       <button onClick={this.handleShowUser}>Log User Token</button>
       <div>{this.props.uid ? <Link to='/paymentform' style={{marginLeft: '40px'}}>Payment Form</Link> : ""}</div> 
-
       </div>
     )
   }

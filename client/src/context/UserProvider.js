@@ -1,8 +1,6 @@
 import React from 'react';
-import axios from 'axios';
 import fire from '../Firebase';
 import firebase from "firebase";
-
 
 const UserContext = React.createContext();
 
@@ -39,12 +37,11 @@ class UserProvider extends React.Component {
   }
 
   signup = (user) => {
-    console.log('context signup', user)
+    console.log('context signup', user);
     fire
       .auth()
       .createUserWithEmailAndPassword(user.email, user.password)
       .then(createdUser => {
-        console.log('in .then() create user context', createdUser);
         this.authListener();
       })
       .catch(error => {
@@ -69,13 +66,15 @@ class UserProvider extends React.Component {
       console.log('you are...', token)
     });
   }
+
   
   authListener = () => {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.setState({
           user: user,
-          uid: user.uid
+          uid: user.uid,
+          
         });
           localStorage.setItem("uid", user.uid);
           localStorage.setItem("user", user)
@@ -93,28 +92,25 @@ class UserProvider extends React.Component {
   };
 
 
+
   render() {    
     return (
       <UserContext.Provider
         value={{
           ...this.state,
-          
           signup: this.signup,
           login: this.login,
           logout: this.logout,
           showToken: this.showToken
         }}
       >
-
         { this.props.children }
       </UserContext.Provider>
     )
   }
-
 }
 
 export default UserProvider;
-
 
 export const withUser = (C) => (props) => (
   <UserContext.Consumer>

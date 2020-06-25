@@ -1,31 +1,37 @@
-import React, {useMemo, useState} from 'react';
-import { withRouter } from 'react-router-dom';
+import React, {useMemo, useState, useEffect} from 'react';
+import {withRouter} from 'react-router-dom';
 import {withUser} from './context/UserProvider';
-import styled from 'styled-components';
-
+import {PayButton, ChoiceBox, SuccessPage,ApplyButton,SubmitPaymentStyles,NextButton, CouponCode} from './Styles';
+import {Checkmark} from 'react-checkmark';
+import fire from './Firebase';
+import PhoneInput from 'react-phone-number-input';
+import yay from './img/yay.png';
+ 
 import {
   useStripe,
   useElements,
-  CardNumberElement,
-  CardCvcElement,
-  CardExpiryElement
+  CardElement
 } from "@stripe/react-stripe-js";
 
+require('dotenv').config();
+
+const stripe = require('stripe')(process.env.REACT_APP_STRIPE_SECRET_KEY);
 
 const useOptions = () => {
- 
   const options = useMemo(
     () => ({
       style: {
         base: {
-          fontSize : "12px",
-          
+          padding:"100px",
+          fontSize : "18px", 
+          lineHeight:3,  
           color: "#424770",
           letterSpacing: "0.025em",
-          fontFamily: "Source Code Pro, monospace",
+          fontFamily:"Source Code Pro, monospace" ,
           "::placeholder": {
             color: "#aab7c4"
-          }
+          },
+  
         },
         invalid: {
           color: "#9e2146"
@@ -36,45 +42,23 @@ const useOptions = () => {
   return options;
 };
 
-const PaymentStyles = styled.div` 
-  margin:0 auto;
-
-  .card{
-    padding:24px;
-    border:0.5px solid lightgrey;
-    border-radius: 10px;
-    background-color: white;
-    margin-bottom:8px;
-    box-shadow: 8px 8px grey;
-  }
-  .labels{
-    font-family:'Open Sans', sans-serif;
-    padding-bottom:8px;
-    font-size: 24px;
-    text-align: center;
-    text-shadow: 2px 2px 5px #CDA373;
-  }
-  .card-form{
-    width:400px;
-  }
-`
-
-const Button = styled.button `
-  background-color:#CDA373;
-  font-family: 'Open Sans', sans-serif;
-  color:white;
-  border-radius: 10px;
-  padding:16px;
-  width: 100%;
-  margin-top:8px ;
-  font-size: 16px;
-  box-shadow: 8px 8px grey;
-`
-
-const SubmitPayment = () => {
+const SubmitPayment = (props) => {
   const stripe = useStripe();
   const elements = useElements();
   const options = useOptions();
+
+  const [success, setSuccess] = useState(null);
+  const [phone, setPhone] = useState(null);
+  const [yearly,setYearly] = useState(180);
+  const [quarterly,setQuarterly] = useState(60);
+  const [plan,sayPlan] = useState('');
+  const [payment,sayPaymentAdded] = useState('');
+
+  const attachPaymentSource =  fire.functions().httpsCallable('attachPaymentSource');
+  const createStripeSubscription = fire.functions().httpsCallable('createStripeSubscription');
+
+  const data = {plan:'',coupon:'',paymentInfo:''}
+  const [info, setInfo] = useState(data)
 
 
   const handleSubmit = async event => {
@@ -86,75 +70,117 @@ const SubmitPayment = () => {
       return;
     }
 
+    try{
+      createStripeSubscription(info)
+      return setSuccess(true)
+    } catch (error) {
+      console.log(error)
+    } 
+
+  }
+
+  const [coupon,setCoupon] = useState("")
+
+  const setValueFunction = async (event) => {
+    event.preventDefault();
+
+    const cardElement = elements.getElement(CardElement)
+    
     const payload = await stripe.createPaymentMethod({
       type: "card",
-      card: elements.getElement(CardNumberElement)
-    });
-    console.log("[PaymentMethod]", payload);
-  };
+      card: cardElement
+    })
 
-  return (
+    attachPaymentSource(payload.paymentMethod.id)
 
-    <PaymentStyles>
+    setInfo(prevInputs => ({...prevInputs,
+      paymentInfo:payload.paymentMethod.id
+    }))
 
-    <form onSubmit={handleSubmit} className="card-form">
-      <p className="labels">
-        Payment Information
-      </p>
-        <CardNumberElement className="card"
-          options={options}
-          onReady={() => {
-            console.log("CardNumberElement [ready]");
-          }}
-          onChange={event => {
-            console.log("CardNumberElement [change]", event);
-          }}
-          onBlur={() => {
-            console.log("CardNumberElement [blur]");
-          }}
-          onFocus={() => {
-            console.log("CardNumberElement [focus]");
-          }}
-        />   
-        <CardExpiryElement className="card"
-          options={options}
-          onReady={() => {
-            console.log("CardNumberElement [ready]");
-          }}
-          onChange={event => {
-            console.log("CardNumberElement [change]", event);
-          }}
-          onBlur={() => {
-            console.log("CardNumberElement [blur]");
-          }}
-          onFocus={() => {
-            console.log("CardNumberElement [focus]");
-          }}
-        />
-        
-        <CardCvcElement className="card"
-          options={options}
-          onReady={() => {
-            console.log("CardNumberElement [ready]");
-          }}
-          onChange={event => {
-            console.log("CardNumberElement [change]", event);
-          }}
-          onBlur={() => {
-            console.log("CardNumberElement [blur]");
-          }}
-          onFocus={() => {
-            console.log("CardNumberElement [focus]");
-          }}
-        />
+    sayPaymentAdded('Payment Added')
+  }
+
+  const setPriceFunction = (price) => {
+
+    if (price === "quarterly"){
+      setInfo(prevInputs => ({...prevInputs,
+          plan:"quarterly"
+      }))
+    }else 
+      setInfo(prevInputs => ({...prevInputs,
+        plan:"yearly"
+      }))
+      sayPlan(price + ' added')
+  }
+
+  const setCouponFunction = (coupon) => {
+    if (coupon === "free10"){
+      
+        setYearly(162)
+        setQuarterly(54)
+
+        setInfo(prevInputs => ({...prevInputs,
+            coupon:coupon
+        }))
+    } else {
+      setInfo(prevInputs => ({...prevInputs,
+        coupon:coupon
+      }))
+    }
+    console.log(props)
+  }
+
+
+  return success ? (
+    <SuccessPage>
+      <div className="success">
+        <Checkmark size='xxLarge'/>
+        <div className="success-text">Payment Added</div>
+        <img src={yay}/>
+      </div>
+      
+    </SuccessPage>
+  ) : (
+      <SubmitPaymentStyles>
+       <div>
+        <CouponCode>
+          <input className="coupon" placeholder="Coupon Code" value = {coupon} onChange={e => setCoupon(e.target.value)}></input>
+          <NextButton onClick={e => setCouponFunction(coupon)}>Apply</NextButton>
+        </CouponCode>
+
+        <NextButton value = "quarterly" onClick={e => setPriceFunction(e.target.value)} 
+          >Quarterly ${quarterly}</NextButton> 
+        <NextButton value = "yearly" onClick={e => setPriceFunction(e.target.value)}>Yearly ${yearly}</NextButton> 
        
-      <Button type="submit" disabled={!stripe} className="button">
-        Confirm Payment
-      </Button>
-    </form>
+       </div>
+        
+        <div className="card-input-row"> 
+            <input type="text" placeholder="Name"></input>
+        </div>
+        <div className="card-input-row"> 
+            <input type="text" placeholder="Email"></input>
+        </div>
+          <PhoneInput country={"us"} defaultCountry="US" placeholder="XXX-XXX-XXXX" value="phone" className="phone-input" onChange={() => setPhone("test")}/>
+          <CardElement options={options}/>
 
-    </PaymentStyles>
-  );
+          <ApplyButton onClick={setValueFunction} className="button">
+            Apply 
+          </ApplyButton> 
+
+        <form onSubmit={handleSubmit}>
+        <PayButton type="submit" disabled={!stripe} className="button">
+            Submit 
+          </PayButton>
+        </form>
+
+      <ChoiceBox>
+        {plan} 
+        <br/>
+        {payment}
+      </ChoiceBox>
+      </SubmitPaymentStyles>
+  
+  )
 };
 
 export default withRouter(withUser(SubmitPayment));

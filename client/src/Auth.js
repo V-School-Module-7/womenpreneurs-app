@@ -8,7 +8,6 @@ import { withUser } from "./context/UserProvider";
 // const firebaseAppAuth = firebaseApp.Auth();
 
 
-
 class Auth extends React.Component {
   constructor() {
     super();
