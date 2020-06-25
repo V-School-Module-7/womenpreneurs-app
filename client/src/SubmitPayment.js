@@ -86,7 +86,6 @@ const SubmitPayment = (props) => {
 
     const cardElement = elements.getElement(CardElement)
     
-    
     const payload = await stripe.createPaymentMethod({
       type: "card",
       card: cardElement
@@ -123,6 +122,10 @@ const SubmitPayment = (props) => {
         setInfo(prevInputs => ({...prevInputs,
             coupon:coupon
         }))
+    } else {
+      setInfo(prevInputs => ({...prevInputs,
+        coupon:coupon
+      }))
     }
     console.log(props)
   }
