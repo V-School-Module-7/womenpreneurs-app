@@ -1,8 +1,11 @@
 import React from 'react';
 import fire from '../Firebase';
-import firebase from "firebase";
+require('dotenv').config();
+
 
 const UserContext = React.createContext();
+
+// let storage = firebase.storage();
 
 class UserProvider extends React.Component {
   constructor() {
@@ -12,12 +15,7 @@ class UserProvider extends React.Component {
       //keep in state in production? 
       user: localStorage.getItem("user") || {},
       uid: localStorage.getItem("uid") || "",
-      authErrMsg: ''
     }
-  }
-
-  handleErrMsg = (errMsg) => {
-    this.setState({authErrMsg: errMsg})
   }
 
   login = (user) => {
@@ -28,28 +26,40 @@ class UserProvider extends React.Component {
       .then(loggedInUser => {
         console.log('in .then login context loggedin', loggedInUser)
         this.authListener();
+        window.location.href = window.location.origin + '/home';
       })
       .catch(error => {
-        this.setState({
-          authErrorMsg: error.message
-        });
+        console.log(error)
+        return error
       });
   }
 
-  signup = (user) => {
-    console.log('context signup', user);
+
+  signup = (userObj) => {
+    console.log('context signup', userObj)
     fire
       .auth()
-      .createUserWithEmailAndPassword(user.email, user.password)
+      .createUserWithEmailAndPassword(userObj.email, userObj.password)
       .then(createdUser => {
         this.authListener();
+        // window.location.href = window.location.origin + '/linkedin';
       })
       .catch(error => {
-        console.log(error);
-        this.setState({
-          authErrorMsg: error.message
+          console.log('error code', error.code)
+          switch (error.code) {
+              case 'auth/email-already-in-use':
+                return new Error(`Email address ${userObj.email} already in use.`);
+                break;
+              case 'auth/invalid-email':
+                return new Error(`Email address ${userObj.email} is invalid.`);
+                break;
+              case 'auth/operation-not-allowed':
+                return new Error(`Auth operation not allowed.`);
+                break;
+              default:
+                return new Error('Error during signup');
+            }
         });
-      });
   }
 
   logout = () => {
@@ -61,15 +71,16 @@ class UserProvider extends React.Component {
     })
   }
 
-  showToken = () => {
-    fire.auth().currentUser.getIdToken().then((token) => {
-      console.log('you are...', token)
-    });
-  }
+
+  // showToken = () => {
+  //   fire.auth().currentUser.getIdToken().then((token) => {
+  //     console.log('you are...', token)
+  //   });
+  // }
 
   
   authListener = () => {
-    firebase.auth().onAuthStateChanged(user => {
+    fire.auth().onAuthStateChanged(user => {
       if (user) {
         this.setState({
           user: user,
@@ -77,31 +88,32 @@ class UserProvider extends React.Component {
           
         });
           localStorage.setItem("uid", user.uid);
-          localStorage.setItem("user", user)
-        console.log('local storage/state set item')
+          localStorage.setItem("user", user);
+        console.log('local storage/state set item');
       } else {
         this.setState({
           user: null,
           uid: null
         });
-        console.log('local storage remove')
+        console.log('local storage remove');
         localStorage.removeItem("user");
-        localStorage.removeItem("uid")
+        localStorage.removeItem("uid");
+        // window.location.href = window.location.origin + '/home';
       }
-    });
+    })
   };
-
 
 
   render() {    
     return (
       <UserContext.Provider
         value={{
-          ...this.state,
           signup: this.signup,
           login: this.login,
           logout: this.logout,
-          showToken: this.showToken
+          hello: 'world',
+          ...this.state,
+
         }}
       >
         { this.props.children }

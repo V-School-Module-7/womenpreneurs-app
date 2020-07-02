@@ -1,4 +1,5 @@
-import firebase from 'firebase';
+
+import firebase from "firebase";
 require('dotenv').config();
 
 //config object, plugs into firebase
@@ -14,6 +15,5 @@ const firebaseConfig = {
 
 
 let fire = firebase.initializeApp(firebaseConfig);
-
 export default fire;
 
