@@ -34,13 +34,13 @@ class UserProvider extends React.Component {
       });
   }
 
+
   signup = (userObj) => {
     console.log('context signup', userObj)
     fire
       .auth()
       .createUserWithEmailAndPassword(userObj.email, userObj.password)
       .then(createdUser => {
-        console.log('in .then() create user context', createdUser);
         this.authListener();
         // window.location.href = window.location.origin + '/linkedin';
       })
@@ -71,18 +71,21 @@ class UserProvider extends React.Component {
     })
   }
 
+
   // showToken = () => {
   //   fire.auth().currentUser.getIdToken().then((token) => {
   //     console.log('you are...', token)
   //   });
   // }
+
   
   authListener = () => {
     fire.auth().onAuthStateChanged(user => {
       if (user) {
         this.setState({
           user: user,
-          uid: user.uid
+          uid: user.uid,
+          
         });
           localStorage.setItem("uid", user.uid);
           localStorage.setItem("user", user);
@@ -100,9 +103,9 @@ class UserProvider extends React.Component {
     })
   };
 
+
   render() {    
     return (
-      
       <UserContext.Provider
         value={{
           signup: this.signup,
@@ -110,8 +113,9 @@ class UserProvider extends React.Component {
           logout: this.logout,
           hello: 'world',
           ...this.state,
+
         }}
-      > 
+      >
         { this.props.children }
       </UserContext.Provider>
     )
@@ -119,7 +123,6 @@ class UserProvider extends React.Component {
 }
 
 export default UserProvider;
-
 
 export const withUser = (C) => (props) => (
   <UserContext.Consumer>

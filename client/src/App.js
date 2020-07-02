@@ -10,10 +10,9 @@ import Nav from "./Nav";
 import LinkedinInfo from './LinkedinInfo';
 // import SignUpForm from "./SignUpForm";
 
+
 class App extends React.Component {
-  
   render() {
-    
     return (
       <div>
         {/* injects global styles for html body */}

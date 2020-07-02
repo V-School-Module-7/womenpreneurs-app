@@ -1,5 +1,8 @@
 
 # womenpreneurs-app
+
+npm run dev starts express server & initializes firebase
+
 Dummy data
 <br />
 Card:4242424242424242 
@@ -9,7 +12,4 @@ CCV:111
 Exp: 10/20
 <br />
 Zip:00000
-
-
-
 

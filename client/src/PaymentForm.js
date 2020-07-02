@@ -1,21 +1,25 @@
 import {Elements} from '@stripe/react-stripe-js';
 import {loadStripe} from '@stripe/stripe-js';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import SubmitPayment from './SubmitPayment.js';
+import {StyledPage,Lady} from './Styles';
+import {withRouter} from 'react-router-dom';
+import {withUser} from './context/UserProvider';
 
 require('dotenv').config();
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_KEY);
 
 class PaymentForm extends React.Component{
+
     render(){
         return (
-            <div>
-                <Elements stripe={stripePromise}>
-                    <SubmitPayment />
+            <StyledPage> 
+                <Elements stripe={stripePromise} className="stripe-element">
+                    <SubmitPayment/>
                 </Elements>
-            </div>
+            </StyledPage>
         );
     }
 };
-export default PaymentForm;
+export default withRouter(withUser(PaymentForm));

@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import fire from './Firebase';
 import CenteredContainer from "./components/Containers/CenteredPageContainer";
@@ -86,6 +87,7 @@ const Auth = props =>  {
     return props.signup(userObj)
   };
 
+
   const handleLoginOrSignup = () => {
     setLoginOrLogout(!loggingIn);
   }
@@ -146,7 +148,9 @@ const Auth = props =>  {
             />
         }
       </CenteredContainer>
+
     );
 }
+
 
 export default withRouter(withUser(Auth));

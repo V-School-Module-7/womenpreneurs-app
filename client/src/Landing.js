@@ -5,6 +5,7 @@ import HeroHeader from './components/Hero/HeroHeader';
 import HeroSecondary from './components/Hero/HeroSecondary';
 // import { withUser } from "./context/UserProvider";
 
+// import { withUser } from "./context/UserProvider";
 
 const Landing = props => {
 
@@ -22,4 +23,6 @@ const Landing = props => {
   );
 };
 
+
 export default withRouter(Landing);
+
