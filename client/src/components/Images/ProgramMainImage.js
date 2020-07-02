@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 
-const ProgramMainImage = styled.image`
+const ProgramMainImage = styled.div`
   min-width: 400px;
   min-height: 330px;
   align-self: center;
@@ -17,8 +17,9 @@ const ProgramMainImage = styled.image`
   } */
   @media(max-width: 1000px) {
     margin: 0;
-    min-width: 380px;
-    min-height: 320px;
+    margin-bottom: 24px;
+    min-width: 320px;
+    min-height: 266px;
     margin-top: 24px;
     box-shadow: 24px 24px 0 0px #fdecdd;
   }

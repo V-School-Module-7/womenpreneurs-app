@@ -9,7 +9,7 @@ const MyProgramCard = styled.div`
   @media(max-width: 1000px) {
     width: 400px;
     height: 100%;
-    flex-direction: column;
+    flex-direction: column-reverse;
   }
 `
 

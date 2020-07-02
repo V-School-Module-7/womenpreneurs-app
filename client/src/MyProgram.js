@@ -4,7 +4,15 @@ import CenteredContainer from './components/Containers/CenteredPageContainer';
 import ProgramCard from './components/Cards/MyProgramCard';
 import UnderlinedHeader from './components/Text/UnderlinedHeader';
 import ProgramMainImage from './components/Images/ProgramMainImage';
+import ProgramLargeImage from './components/Images/ProgramLargeImage';
 import SecondaryTitle from './components/Titles/SecondaryTitle';
+import SecondaryTitleContainer from './components/Containers/SecondaryTitleContainer';
+import HorizontalDisappearingBar from './components/Dividers/HorizontalDisappearingBar';
+import ModuleButton from './components/Buttons/ModuleButton';
+import ClassMaterialsGrid from './components/Containers/ClassMaterialsGrid';
+import OuterColumn from './components/Containers/OuterColumn';
+import CenterColumn from './components/Containers/CenterColumn';
+
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 
@@ -40,43 +48,46 @@ const MyProgram = () => {
   for (let i = 0; i < scheduleImages.length; i++) {
     slides.push(
       <Slide key={Math.random() * 6000} index={i} style={{ boxSizing: 'border-box'}}>
-        <img src={scheduleImages[i].toString()} style={{height: '294px', width: '380px', border: '3px solid white'}} />
+        <div>
+          <h4>Today, June 18, 2020</h4>
+          <p>
+          Vel aliquet vivamus velit aliquet egestas pretium risus 
+          </p>
+          <p>
+          Faucibus dictum tortor a, accumsan, congue commodo
+          </p>
+        </div>
       </Slide>
     )
   }
 
-    console.log('slides', slides)
-
-    let sliderStyles;
-    let visibleSlides;
-    
-
-
-    if (slides.length === 1 || windowSize.width <= 720) {
-      sliderStyles = {
-            width: '385px', height: '310px', marginTop: '30px'
-          }
-      visibleSlides = 1
-    }
-    if (slides.length === 2 && windowSize.width > 720 || slides.length >= 2 && windowSize.width > 720 ) {
-      sliderStyles = {
-            width: '690px', height: '270px', marginTop: '30px'
-          }
-      visibleSlides = 2
-    }
-    if (slides.length >= 3 && windowSize.width > 1080) {
-      sliderStyles = {
-            width: '1035px', height: '270px', marginTop: '30px'
-          }
-      visibleSlides = 3
-    }
-    if (slides.length >= 4 && windowSize.width > 1430) {
-      sliderStyles = {
-          width: '1380px', height: '270px', marginTop: '30px'
+  let sliderStyles;
+  let visibleSlides;
+  
+  if (slides.length === 1 || windowSize.width <= 720) {
+    sliderStyles = {
+          width: '355px', height: '310px', marginTop: '30px'
         }
-      visibleSlides = 4
-       
-    }
+    visibleSlides = 1;
+  }
+  if (slides.length === 2 && windowSize.width > 720 || slides.length >= 2 && windowSize.width > 720 ) {
+    sliderStyles = {
+          width: '690px', height: '270px', marginTop: '30px'
+        }
+    visibleSlides = 2;
+  }
+  if (slides.length >= 3 && windowSize.width > 1080) {
+    sliderStyles = {
+          width: '1035px', height: '270px', marginTop: '30px'
+        }
+    visibleSlides = 3;
+  }
+  if (slides.length >= 4 && windowSize.width > 1430) {
+    sliderStyles = {
+        width: '1380px', height: '270px', marginTop: '30px'
+      }
+    visibleSlides = 4;
+  }
 
   return (
     <CenteredContainer>
@@ -92,9 +103,10 @@ const MyProgram = () => {
         </div>
         <ProgramMainImage backgroundImage={bgImage} />
       </ProgramCard>
-      <div style={{ width: '860px', marginBottom: '48px'}}>
+      <HorizontalDisappearingBar />
+      <SecondaryTitleContainer>
         <SecondaryTitle>Schedule</SecondaryTitle>
-      </div>
+      </SecondaryTitleContainer>
       <CarouselProvider
           naturalSlideWidth={4}
           naturalSlideHeight={3}
@@ -104,14 +116,37 @@ const MyProgram = () => {
           infinite={true}
         style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}
       >
-      <div style={{display: 'flex', marginTop: '80px', marginBottom: '60px', height: '250px', alignItems: 'center'}}>
-        <ButtonBack>Back</ButtonBack>
+      <div style={{display: 'flex', height: '250px', alignItems: 'center'}}>
+        <ButtonBack style={{backgroundColor: 'inherit', border: 'none'}}><img src={process.env.PUBLIC_URL + '/back.png'} style={{width: '20px', height: '20px', marginTop: '5px'}} /></ButtonBack>
           <Slider style={sliderStyles}>
             {slides}
           </Slider>
-        <ButtonNext>Next</ButtonNext>
+        <ButtonNext style={{backgroundColor: 'inherit', border: 'none'}}><img src={process.env.PUBLIC_URL + '/next.png'} style={{width: '20px', height: '20px', marginTop: '5px'}} /></ButtonNext>
       </div>
       </CarouselProvider>
+      <ProgramLargeImage backgroundImage={bgImage} />
+      <SecondaryTitleContainer>
+        <SecondaryTitle>Class Files</SecondaryTitle>
+      </SecondaryTitleContainer>
+      <ClassMaterialsGrid>
+        <OuterColumn mentorBox={true} >
+          <ModuleButton bgColor='#e4e8f9'>Module 1</ModuleButton>
+          <ModuleButton bgColor='#fceab0'>Module 2</ModuleButton>
+          <ModuleButton bgColor='#fbe9ec'>Module 3</ModuleButton>
+        </OuterColumn>
+        <CenterColumn>
+          <h4 style={{borderBottom: '1px solid black'}}>Documents</h4>
+          <h3 style={{width: '90%', fontWeight: 'normal'}}>Document One: Lorem ipsum, dolor sit amet consectetur adipisicing elit.</h3>
+          <h3 style={{width: '90%', fontWeight: 'normal'}}>Document Two: Lorem ipsum, dolor sit amet consectetur adipisicing elit.</h3>
+          <h3 style={{width: '90%', fontWeight: 'normal'}}>Document Three: Lorem ipsum, dolor sit amet consectetur adipisicing elit.</h3>
+        </CenterColumn>
+        <OuterColumn>
+          <h4 style={{borderBottom: '1px solid black'}}>Resources</h4>
+          <h3 style={{width: '90%', fontWeight: 'normal'}}>Resource One: Lorem ipsum, dolor sit amet consectetur adipisicing elit.</h3>
+          <h3 style={{width: '90%', fontWeight: 'normal'}}>Resource Two: Lorem ipsum, dolor sit amet consectetur adipisicing elit.</h3>
+          <h3 style={{width: '90%', fontWeight: 'normal'}}>Resource Three: Lorem ipsum, dolor sit amet consectetur adipisicing elit.</h3>
+        </OuterColumn>
+      </ClassMaterialsGrid>
     </CenteredContainer>
   )
 }

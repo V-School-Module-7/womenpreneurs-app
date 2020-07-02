@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 
-const ArticleCardImage = styled.image`
+const ArticleCardImage = styled.div`
   min-width: 240px;
   min-height: 240px;
   align-self: center;
