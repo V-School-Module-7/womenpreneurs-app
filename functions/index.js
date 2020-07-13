@@ -95,9 +95,7 @@ exports.createStripeCustomer = functions.auth.user().onCreate(async (user) => {
     return admin.firestore().collection('stripe_customers').doc(user.uid).set({customer_id: customer.id});
 });
 
-
 /*Past this line, code is developed by Patrice Blocker*/
-
 
 exports.attachPaymentSource = functions.https.onCall(async(data,context) => {
     console.log('attach payment source entry point')
