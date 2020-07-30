@@ -13,7 +13,7 @@ import PageTitle from "./components/Titles/PageTitle";
 import IncrementButton from "./components/Forms/IncrementButton";
 import DecrementButton from "./components/Forms/DecrementButton";
 import FormLabel from "./components/Forms/FormLabel";
-const axios = require('axios');
+import axios from 'axios';
 require('dotenv').config();
 
 
