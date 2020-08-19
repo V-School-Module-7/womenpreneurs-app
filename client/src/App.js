@@ -8,6 +8,8 @@ import Global from "./components/Containers/Global";
 import { Switch, Route } from "react-router-dom";
 import Nav from "./Nav";
 import LinkedinInfo from './LinkedinInfo';
+import MyMentors from './MyMentors';
+import MentorSignup from './MentorSignup';
 // import SignUpForm from "./SignUpForm";
 
 
@@ -25,6 +27,8 @@ class App extends React.Component {
           <Route path="/acctsetup" component={LinkedinInfo} />
           {/* <Route path="/acctsetup" component={SignUpTwo} />  */}
           <Route path="/paymentform" component={PaymentForm} />
+          <Route path="/mymentors" component={MyMentors} />
+          <Route path="/mentorsignup" component={MentorSignup} />
         </Switch>
       </div>
     );
